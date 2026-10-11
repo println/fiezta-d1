@@ -107,7 +107,11 @@
     function observePlayerState() {
       var video = videoElement();
       if (!video) { return; }
-      emit('playerStateChanged', { state: playbackState(video), muted: !!video.muted }, { video: video, player: apiPlayer() });
+      emit('playerStateChanged', { state: playbackState(video), muted: !!video.muted }, {
+        video: video,
+        player: apiPlayer(),
+        controlsSurface: document.querySelector('.player-controls-background')
+      });
     }
 
     function observeAd() {
