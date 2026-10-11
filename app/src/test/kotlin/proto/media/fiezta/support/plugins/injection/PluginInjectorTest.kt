@@ -17,8 +17,8 @@ class PluginInjectorTest {
         {
           "id": "site", "name": "Site", "version": 1,
           "rules": [
-            { "match": ["https://m.site.com/*"], "core": "core.mobile.js" },
-            { "match": ["https://www.site.com/*"], "core": "core.desktop.js" },
+            { "match": ["https://m.site.com/*"], "core": ["core.common.js", "core.mobile.js"] },
+            { "match": ["https://www.site.com/*"], "core": ["core.common.js", "core.desktop.js"] },
             { "match": ["https://*.site.com/*"], "events": "watch.events.js",
               "tweaks": [{ "script": "a.tweak.js", "runAt": "start" }] }
           ]
@@ -65,7 +65,7 @@ class PluginInjectorTest {
         injector(PluginEnv.CAR).onPageStage(PageStage.COMMITTED, "https://m.site.com/watch?v=1")
 
         assertEquals(
-            listOf("bus", "script:core.mobile.js", "runtime", "script:watch.events.js", "script:a.tweak.js"),
+            listOf("bus", "script:core.common.js", "script:core.mobile.js", "runtime", "script:watch.events.js", "script:a.tweak.js"),
             evaluated
         )
     }
@@ -85,7 +85,7 @@ class PluginInjectorTest {
     fun coreReachesThePhoneToo() {
         injector(PluginEnv.PHONE).onPageStage(PageStage.COMMITTED, "https://www.site.com/watch?v=1")
 
-        assertEquals(listOf("bus", "script:core.desktop.js", "script:a.tweak.js"), evaluated)
+        assertEquals(listOf("bus", "script:core.common.js", "script:core.desktop.js", "script:a.tweak.js"), evaluated)
     }
 
     @Test
@@ -94,7 +94,7 @@ class PluginInjectorTest {
         injector.onPageStage(PageStage.COMMITTED, "https://other.com/")
         injector.onPageStage(PageStage.ROUTE_CHANGED, "https://m.site.com/")
 
-        assertEquals(listOf("bus", "script:core.mobile.js"), evaluated.filter { it.startsWith("bus") || it.contains("core") })
+        assertEquals(listOf("bus", "script:core.common.js", "script:core.mobile.js"), evaluated.filter { it.startsWith("bus") || it.contains("core") })
     }
 
     @Test

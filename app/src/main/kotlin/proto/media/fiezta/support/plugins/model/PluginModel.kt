@@ -20,7 +20,7 @@ data class PluginRule(
     val match: List<String>,
     val events: String?,
     val tweaks: List<TweakSpec>,
-    val core: String? = null
+    val core: List<String> = emptyList()
 )
 
 data class TweakSpec(

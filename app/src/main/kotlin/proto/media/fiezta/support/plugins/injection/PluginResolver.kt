@@ -21,9 +21,9 @@ class PluginResolver(private val stack: List<PluginManifest>) {
         return null
     }
 
-    fun coresFor(url: String): List<ResolvedCore> = stack.mapNotNull { plugin ->
-        val rule = plugin.rules.firstOrNull { it.core != null && it.match.any { pattern -> UrlMatch.matches(pattern, url) } }
-        rule?.core?.let { ResolvedCore(plugin.id, it) }
+    fun coresFor(url: String): List<ResolvedCore> = stack.flatMap { plugin ->
+        val rule = plugin.rules.firstOrNull { it.core.isNotEmpty() && it.match.any { pattern -> UrlMatch.matches(pattern, url) } }
+        rule?.core.orEmpty().map { ResolvedCore(plugin.id, it) }
     }
 
     fun tweaksFor(url: String, env: PluginEnv): List<ResolvedTweak> {

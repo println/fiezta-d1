@@ -22,13 +22,13 @@ class PluginManifestValidatorTest {
 
     @Test
     fun ruleWithOnlyACoreIsValid() {
-        val rules = listOf(PluginRule(listOf("https://youtube.com/*"), null, emptyList(), "core.js"))
+        val rules = listOf(PluginRule(listOf("https://youtube.com/*"), null, emptyList(), listOf("core.js")))
         assertTrue(PluginManifestValidator.errors(manifest(rules = rules), PluginOrigin.INSTALLED).isEmpty())
     }
 
     @Test
     fun coreScriptNameCannotEscapeThePluginFolder() {
-        val rules = listOf(PluginRule(listOf("https://youtube.com/*"), null, emptyList(), "../core.js"))
+        val rules = listOf(PluginRule(listOf("https://youtube.com/*"), null, emptyList(), listOf("../core.js")))
         assertTrue(PluginManifestValidator.errors(manifest(rules = rules), PluginOrigin.INSTALLED).isNotEmpty())
     }
 

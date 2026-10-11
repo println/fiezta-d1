@@ -55,8 +55,14 @@ object PluginManifestJson {
         match = jsonStrings(json.getJSONArray("match")),
         events = if (json.has("events")) json.getString("events") else null,
         tweaks = if (json.has("tweaks")) jsonObjects(json.getJSONArray("tweaks")).map(::parseTweak) else emptyList(),
-        core = if (json.has("core")) json.getString("core") else null
+        core = if (json.has("core")) parseCore(json.get("core")) else emptyList()
     )
+
+    private fun parseCore(value: Any): List<String> = when (value) {
+        is String -> listOf(value)
+        is JSONArray -> jsonStrings(value)
+        else -> throw InvalidPluginException("invalid core: $value")
+    }
 
     private fun parseTweak(json: JSONObject): TweakSpec {
         if (!json.has("script")) {
