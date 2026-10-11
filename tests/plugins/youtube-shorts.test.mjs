@@ -2,10 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { startPage } from './harness.mjs';
 
+const CORES = [['youtube', 'core.common.js'], ['youtube', 'core.desktop.js']];
+
 function shortsPage() {
   const page = startPage({
     fixture: 'youtube-shorts.html',
     url: 'https://www.youtube.com/shorts/abc123',
+    cores: CORES,
     plugin: ['youtube', 'shorts.events.js']
   });
   page.addMedia({ currentTime: 2, duration: 30 });
