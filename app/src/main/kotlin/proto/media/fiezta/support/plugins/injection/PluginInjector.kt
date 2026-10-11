@@ -24,6 +24,7 @@ class PluginInjector(
 ) : PluginPageListener {
 
     private var activeEvents: ResolvedEvents? = null
+    private val coresInjectedThisDocument = mutableSetOf<Pair<String, String>>()
     private var handlers: Set<String> = emptySet()
     private var voiceSearchContext: VoiceSearchContext? = null
     private val tweaksRunThisLoad = mutableSetOf<Pair<String, String>>()
@@ -34,6 +35,7 @@ class PluginInjector(
             PageStage.COMMITTED -> beginDocument(url)
             PageStage.ROUTE_CHANGED -> enterRoute(url)
             else -> {
+                injectCores(url)
                 updateEvents(url)
                 runTweaks(url, stage)
             }
@@ -41,6 +43,7 @@ class PluginInjector(
     }
 
     fun onStackChanged(url: String?) {
+        injectCores(url)
         updateEvents(url)
     }
 
@@ -57,14 +60,17 @@ class PluginInjector(
     private fun beginDocument(url: String?) {
         tweaksRunThisLoad.clear()
         lastUrlRunForTweak.clear()
+        coresInjectedThisDocument.clear()
         handlers = emptySet()
         activeEvents = null
+        injectCores(url)
         updateEvents(url)
         publishVoiceSearchContext()
         runTweaks(url, PageStage.COMMITTED)
     }
 
     private fun enterRoute(url: String?) {
+        injectCores(url)
         updateEvents(url)
         runTweaks(url, PageStage.ROUTE_CHANGED)
         runTweaks(url, PageStage.LOADED)
@@ -109,6 +115,20 @@ class PluginInjector(
             "window.__fieztaVoiceSearch = { id: ${context.id}, generation: ${context.generation}, " +
                 "query: ${JsString.quote(context.query)} };"
         )
+    }
+
+    private fun injectCores(url: String?) {
+        if (url == null) return
+        val pending = PluginResolver(source.stack()).coresFor(url)
+            .filter { (it.pluginId to it.script) !in coresInjectedThisDocument }
+        if (pending.isEmpty()) return
+        if (!evaluate(source.pageBus())) return
+        for (core in pending) {
+            log.debug("core -> ${core.pluginId}/${core.script}")
+            if (evaluate(source.script(core.pluginId, core.script))) {
+                coresInjectedThisDocument.add(core.pluginId to core.script)
+            }
+        }
     }
 
     private fun updateEvents(url: String?) {

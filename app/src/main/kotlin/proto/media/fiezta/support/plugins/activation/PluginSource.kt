@@ -27,6 +27,9 @@ class PluginSource(
     private var runtimeCache: String? = null
 
     @Volatile
+    private var pageBusCache: String? = null
+
+    @Volatile
     private var stackCache: List<PluginManifest>? = null
 
     @Volatile
@@ -116,6 +119,9 @@ class PluginSource(
 
     fun runtime(): String =
         runtimeCache ?: files.readRuntime().also { runtimeCache = it }
+
+    fun pageBus(): String =
+        pageBusCache ?: files.readPageBus().also { pageBusCache = it }
 
     fun allKnownPlugins(): List<LoadedManifest> =
         (loadDefaults() + loadInstalled())

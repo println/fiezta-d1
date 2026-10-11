@@ -50,7 +50,7 @@ function installMediaSession(window) {
   };
 }
 
-export function startPage({ fixture, url = 'https://m.youtube.com/', plugin = null } = {}) {
+export function startPage({ fixture, url = 'https://m.youtube.com/', plugin = null, core = null } = {}) {
   const dom = new JSDOM(fixture ? readFixture(fixture) : '<!DOCTYPE html><html><body></body></html>', {
     url,
     runScripts: 'outside-only',
@@ -74,6 +74,8 @@ export function startPage({ fixture, url = 'https://m.youtube.com/', plugin = nu
     onHandlersChanged: (names) => handlerNames.push(names === '' ? [] : names.split(','))
   };
 
+  window.eval(scriptOf('fiezta-page.js'));
+  if (core) window.eval(scriptOf(...core));
   window.eval(scriptOf('fiezta-runtime.js'));
   if (plugin) window.eval(scriptOf(...plugin));
 
@@ -81,6 +83,7 @@ export function startPage({ fixture, url = 'https://m.youtube.com/', plugin = nu
     window,
     document: window.document,
     fiezta: window.fiezta,
+    bus: window.fieztaPage,
     readings,
     queues,
     searchResults,

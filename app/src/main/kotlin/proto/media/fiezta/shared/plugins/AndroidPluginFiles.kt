@@ -21,6 +21,8 @@ class AndroidPluginFiles(private val context: Context, private val log: PluginLo
 
     override fun readRuntime(): String = readAsset("$ASSETS_ROOT/fiezta-runtime.js")
 
+    override fun readPageBus(): String = readAsset("$ASSETS_ROOT/fiezta-page.js")
+
     override fun readInstalled(pluginId: String, file: String): String =
         File(File(pluginsDir(), pluginId), file).readText()
 

@@ -6,6 +6,7 @@ import proto.media.fiezta.support.plugins.model.PluginManifest
 import proto.media.fiezta.support.plugins.model.PluginRule
 import proto.media.fiezta.support.plugins.model.Requirement
 import proto.media.fiezta.support.plugins.model.Rerun
+import proto.media.fiezta.support.plugins.model.ResolvedCore
 import proto.media.fiezta.support.plugins.model.ResolvedEvents
 import proto.media.fiezta.support.plugins.model.TweakSpec
 import org.junit.Assert.assertEquals
@@ -30,6 +31,18 @@ class PluginResolverTest {
         "generic", "Generic", 1,
         listOf(PluginRule(listOf("*"), "generic.events.js", emptyList()))
     )
+
+    @Test
+    fun coreIsTheFirstMatchingCoreRuleOfEachPlugin() {
+        val mobile = PluginRule(listOf("https://m.youtube.com/*"), null, emptyList(), "core.mobile.js")
+        val desktop = PluginRule(listOf("https://www.youtube.com/*"), null, emptyList(), "core.desktop.js")
+        val plugin = PluginManifest("youtube", "YouTube", 2, listOf(mobile, desktop, watchRule))
+        val resolver = PluginResolver(listOf(plugin, generic))
+
+        assertEquals(listOf(ResolvedCore("youtube", "core.mobile.js")), resolver.coresFor("https://m.youtube.com/watch?v=1"))
+        assertEquals(listOf(ResolvedCore("youtube", "core.desktop.js")), resolver.coresFor("https://www.youtube.com/watch?v=1"))
+        assertEquals(emptyList<ResolvedCore>(), resolver.coresFor("https://example.com/"))
+    }
 
     @Test
     fun playlistUrlResolvesPlaylistNotWatch() {

@@ -54,7 +54,8 @@ object PluginManifestJson {
     private fun parseRule(json: JSONObject): PluginRule = PluginRule(
         match = jsonStrings(json.getJSONArray("match")),
         events = if (json.has("events")) json.getString("events") else null,
-        tweaks = if (json.has("tweaks")) jsonObjects(json.getJSONArray("tweaks")).map(::parseTweak) else emptyList()
+        tweaks = if (json.has("tweaks")) jsonObjects(json.getJSONArray("tweaks")).map(::parseTweak) else emptyList(),
+        core = if (json.has("core")) json.getString("core") else null
     )
 
     private fun parseTweak(json: JSONObject): TweakSpec {

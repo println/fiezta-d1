@@ -2,6 +2,7 @@
   if (window.fiezta) { return; }
   var handlers = {};
   var timers = [];
+  var subscriptions = [];
   var reportedNext = null, reportedPrevious = null;
   var metadataProvider = null;
   var queueProvider = null;
@@ -265,7 +266,12 @@
       timers.push(id);
       return id;
     },
+    listen: function(name, fn) {
+      subscriptions.push(window.fieztaPage.on(name, fn));
+    },
     reset: function() {
+      subscriptions.forEach(function(cancel) { cancel(); });
+      subscriptions = [];
       for (var i = 0; i < timers.length; i++) { window.clearInterval(timers[i]); }
       timers = [];
       handlers = {};

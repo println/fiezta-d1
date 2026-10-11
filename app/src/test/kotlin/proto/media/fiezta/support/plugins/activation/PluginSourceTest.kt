@@ -15,6 +15,7 @@ class PluginSourceTest {
         override fun defaultIds(): List<String> = emptyList()
         override fun readDefault(pluginId: String, file: String) = "default:$pluginId/$file"
         override fun readRuntime() = "runtime"
+        override fun readPageBus() = "bus"
         override fun verifiedInstalledManifests(): Map<String, String> = emptyMap()
         override fun readInstalled(pluginId: String, file: String) = "installed:$pluginId/$file"
         override fun install(pluginId: String, version: Int, from: File) = Unit

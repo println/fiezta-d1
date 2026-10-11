@@ -16,7 +16,12 @@ data class PluginManifest(
 
 data class VoiceSpec(val resource: String?, val script: String?, val searchEngineId: String?)
 
-data class PluginRule(val match: List<String>, val events: String?, val tweaks: List<TweakSpec>)
+data class PluginRule(
+    val match: List<String>,
+    val events: String?,
+    val tweaks: List<TweakSpec>,
+    val core: String? = null
+)
 
 data class TweakSpec(
     val script: String,
@@ -47,6 +52,8 @@ enum class CarEvent(val jsName: String) {
 }
 
 data class ResolvedEvents(val pluginId: String, val script: String)
+
+data class ResolvedCore(val pluginId: String, val script: String)
 
 data class ResolvedTweak(val pluginId: String, val spec: TweakSpec)
 
