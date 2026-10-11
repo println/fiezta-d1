@@ -17,7 +17,7 @@
     {
       "match": ["https://youtube.com/*", "https://*.youtube.com/*"],
       "tweaks": [
-        { "script": "unmute-player.tweak.js", "runAt": "ready", "rerun": "urlChange", "env": "car" },
+        { "script": "unmute-player.tweak.js", "runAt": "ready", "env": "car" },
         { "script": "ad-prune.tweak.js", "runAt": "start", "requires": "adblock", "env": "both" },
         {
           "script": "player-scroll.tweak.js", "runAt": "loaded", "env": "car",
