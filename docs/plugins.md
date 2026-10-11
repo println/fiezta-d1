@@ -140,6 +140,18 @@ chega com a URL daquele documento, e é `committed` que zera o que já rodou nes
 - **Tweaks**: todos os tweaks de todas as regras que casam, de todos os plugins da
   pilha, com `env` compatível, sem repetir o mesmo `(pluginId, script)`.
 
+## Núcleo e barramento de eventos (Plano 66)
+
+Uma regra do manifesto pode ter `core`: um script ou uma lista de scripts (`"core": ["core.common.js", "core.mobile.js"]`). O motor avalia o `core` da primeira regra de cada plugin que casa com a URL, uma vez por documento, nos dois ambientes, **antes** de qualquer tweak ou script de eventos. O núcleo só observa a página; quem age são os pedaços.
+
+O barramento `window.fieztaPage` (`assets/plugins/fiezta-page.js`) é injetado antes dos núcleos:
+
+- `emit(nome, detail, elements, { moment })` — o nome tem prefixo `<id do plugin>:`; sem prefixo, lança erro.
+- `on(nome, (detail, elements) => …)` devolve a função de cancelamento. Evento de estado é pegajoso: quem assina tarde recebe o último valor. `moment: true` não é pegajoso. `emit` com `detail` igual ao anterior é descartado.
+- `last(nome)` e `lastElements(nome)` leem o último valor. Em script de eventos, assinar com `fiezta.listen(nome, fn)` — o `fiezta.reset()` cancela.
+
+Eventos do YouTube (`core.common.js` + `core.mobile.js`/`core.desktop.js`, mesmo vocabulário nos dois sites): `pageChanged`, `trackChanged`, `playerStateChanged`, `adChanged`, `navigationChanged`, `queueChanged`, `playerVisibilityChanged`, `searchResultsChanged`, `userInteracted` (momento). Seletor e evento nativo do site só aparecem nos núcleos. `dialogChanged` ("ainda está assistindo") ainda não existe: o diálogo não foi reproduzido.
+
 ## O contrato de controle remoto
 
 Referência completa: `docs/plans/44-contrato-de-controle-remoto.md`. Duas listas fechadas — o
