@@ -24,6 +24,10 @@ function installLayout(window) {
   };
 }
 
+function installResizeObserver(window) {
+  window.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} };
+}
+
 // jsdom does not implement innerText. This approximation puts a line break between
 // block-level children, which is all the plugins rely on when reading page headers.
 function installInnerText(window) {
@@ -59,6 +63,7 @@ export function startPage({ fixture, url = 'https://m.youtube.com/', plugin = nu
   const { window } = dom;
   installLayout(window);
   installInnerText(window);
+  installResizeObserver(window);
   installMediaSession(window);
 
   const readings = [];
@@ -84,6 +89,7 @@ export function startPage({ fixture, url = 'https://m.youtube.com/', plugin = nu
     document: window.document,
     fiezta: window.fiezta,
     bus: window.fieztaPage,
+    load: (...parts) => window.eval(scriptOf(...parts)),
     readings,
     queues,
     searchResults,

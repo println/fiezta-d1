@@ -1,9 +1,11 @@
 {
   "id": "youtube",
   "name": "YouTube",
-  "version": 1,
+  "version": 2,
   "voice": { "resource": "/results?search_query={searchTerms}", "script": "voice-search.js" },
   "rules": [
+    { "match": ["https://m.youtube.com/*"], "core": ["core.common.js", "core.mobile.js"] },
+    { "match": ["https://youtube.com/*", "https://www.youtube.com/*"], "core": ["core.common.js", "core.desktop.js"] },
     {
       "match": ["https://youtube.com/shorts/*", "https://*.youtube.com/shorts/*"],
       "events": "shorts.events.js"
