@@ -20,7 +20,7 @@
         { "script": "unmute-player.tweak.js", "runAt": "ready", "rerun": "urlChange", "env": "car" },
         { "script": "ad-prune.tweak.js", "runAt": "start", "requires": "adblock", "env": "both" },
         {
-          "script": "player-scroll.tweak.js", "runAt": "loaded", "rerun": "urlChange", "env": "car",
+          "script": "player-scroll.tweak.js", "runAt": "loaded", "env": "car",
           "option": { "key": "pref_youtube_scroll_to_player", "default": true }
         }
       ]
