@@ -10,6 +10,8 @@ interface PluginFiles {
 
     fun readRuntime(): String
 
+    fun readPageBus(): String
+
     fun verifiedInstalledManifests(): Map<String, String>
 
     fun readInstalled(pluginId: String, file: String): String

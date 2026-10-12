@@ -2,10 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { startPage } from './harness.mjs';
 
+const DESKTOP = [['youtube', 'core.common.js'], ['youtube', 'core.desktop.js']];
+const MOBILE = [['youtube', 'core.common.js'], ['youtube', 'core.mobile.js']];
+
 function playlistPage() {
   return startPage({
     fixture: 'youtube-playlist.html',
     url: 'https://m.youtube.com/watch?v=I_izvAbhExY&list=RDI_izvAbhExY',
+    cores: MOBILE,
     plugin: ['youtube', 'watch.events.js']
   });
 }

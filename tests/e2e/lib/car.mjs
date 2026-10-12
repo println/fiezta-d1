@@ -5,11 +5,17 @@ import { Logcat, prefValue, readPrefs, shell, unescapeXml } from './adb.mjs';
 import { config } from './config.mjs';
 import { pageSession } from './devtools.mjs';
 import { HeadUnit } from './dhu.mjs';
+import { changedFraction, colourfulFraction, squareAround } from './png.mjs';
 
 const run = promisify(execFile);
 
 const LAUNCHER_FIEZTA_ICON = { x: 165, y: 228 };
-const LAUNCHER_COMPONENT = 'com.google.android.projection.gearhead/com.google.android.projection.gearhead.system.applauncher.GhAppLauncherService';
+const LAUNCHER_IN_FRONT = /makeForeground for component ComponentInfo\{[^}]*applauncher\.GhAppLauncherService\}/;
+const LAUNCHER_CAME_OR_WENT = /make(Fore|Back)ground for component ComponentInfo\{[^}]*applauncher\.GhAppLauncherService\}/;
+const ICON_HALF_SIDE = 36;
+const ICON_IS_DRAWN_FROM = 0.4;
+const ICON_IS_STILL_UNDER = 0.02;
+const STILL_FRAMES_BEFORE_THE_TAP = 2;
 const FIEZTA_CAR_COMPONENT = `${config.packageName}/proto.media.fiezta.features.domain.car.app.CarService`;
 const FOREGROUND = /CAR\.CAM\s*: makeForeground for component ComponentInfo\{([^}]+)\}/;
 
@@ -34,12 +40,11 @@ export class CarSession {
     return session;
   }
 
-  async openLauncher(attempts = 3) {
+  async openLauncher(attempts = 4) {
     const mark = this.log.mark();
     this.unit.key('home');
-    const opened = await this.log.waitFor(/makeBackground for component ComponentInfo\{[^}]*ProjectionTrampolineFallbackService\}/, { from: mark, timeout: 5_000 })
-      .catch(() => null);
-    if (opened) return;
+    const moved = await this.log.waitFor(LAUNCHER_CAME_OR_WENT, { from: mark, timeout: 20_000 }).catch(() => null);
+    if (moved && LAUNCHER_IN_FRONT.test(moved)) return;
     if (attempts <= 1) throw new Error('the head unit never showed the app launcher');
     await this.openLauncher(attempts - 1);
   }
@@ -77,11 +82,31 @@ export class CarSession {
     return mark;
   }
 
+  async iconUnderTheTap() {
+    return squareAround(await this.unit.screen(), LAUNCHER_FIEZTA_ICON, ICON_HALF_SIDE);
+  }
+
+  async launcherIsReadyForTheTap(timeout = 15_000) {
+    const deadline = Date.now() + timeout;
+    let previous = await this.iconUnderTheTap();
+    let stillFrames = 0;
+    while (Date.now() < deadline) {
+      await sleep(500);
+      const icon = await this.iconUnderTheTap();
+      const drawnAndStill = colourfulFraction(icon) >= ICON_IS_DRAWN_FROM && changedFraction(previous, icon) < ICON_IS_STILL_UNDER;
+      stillFrames = drawnAndStill ? stillFrames + 1 : 0;
+      if (stillFrames >= STILL_FRAMES_BEFORE_THE_TAP) return true;
+      previous = icon;
+    }
+    return false;
+  }
+
   async openCarScreen(attempts = 5) {
     await this.openLauncher();
+    const ready = await this.launcherIsReadyForTheTap();
     const mark = this.log.mark();
-    this.unit.tap(LAUNCHER_FIEZTA_ICON.x, LAUNCHER_FIEZTA_ICON.y);
-    const opened = await this.waitForForeground((component) => component === FIEZTA_CAR_COMPONENT, mark, 15_000)
+    if (ready) this.unit.tap(LAUNCHER_FIEZTA_ICON.x, LAUNCHER_FIEZTA_ICON.y);
+    const opened = ready && await this.waitForForeground((component) => component === FIEZTA_CAR_COMPONENT, mark, 15_000)
       .catch(() => null);
     if (!opened) {
       if (attempts <= 1) throw new Error('the Fiezta icon of the launcher never brought the car screen up');

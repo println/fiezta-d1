@@ -1,7 +1,11 @@
 import { spawn } from 'node:child_process';
+import { readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { adb } from './adb.mjs';
 import { config } from './config.mjs';
+import { decodePng } from './png.mjs';
 
 export class HeadUnit {
   static async start(attempts = 4) {
@@ -53,6 +57,19 @@ export class HeadUnit {
 
   speak(wavPath) {
     this.send(`mic play ${wavPath}`);
+  }
+
+  async screen(timeout = 5_000) {
+    const path = join(tmpdir(), `fiezta-head-unit-${this.process.pid}.png`);
+    await rm(path, { force: true });
+    this.send(`screenshot ${path}`);
+    const deadline = Date.now() + timeout;
+    while (Date.now() < deadline) {
+      const image = await readFile(path).then(decodePng).catch(() => null);
+      if (image) return image;
+      await sleep(100);
+    }
+    throw new Error('the head unit never wrote the screenshot');
   }
 
   async quit() {

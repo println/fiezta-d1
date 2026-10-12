@@ -140,6 +140,22 @@ chega com a URL daquele documento, e é `committed` que zera o que já rodou nes
 - **Tweaks**: todos os tweaks de todas as regras que casam, de todos os plugins da
   pilha, com `env` compatível, sem repetir o mesmo `(pluginId, script)`.
 
+## Núcleo e barramento de eventos (Plano 66)
+
+Uma regra do manifesto pode ter `core`: um script ou uma lista de scripts (`"core": ["core.common.js", "core.mobile.js"]`). O motor avalia o `core` da primeira regra de cada plugin que casa com a URL, uma vez por documento, nos dois ambientes, **antes** de qualquer tweak ou script de eventos. O núcleo só observa a página; quem age são os pedaços.
+
+O barramento `window.fieztaPage` (`assets/plugins/fiezta-page.js`) é injetado antes dos núcleos:
+
+- `emit(nome, detail, elements, { moment })` — o nome tem prefixo `<id do plugin>:`; sem prefixo, lança erro.
+- `on(nome, (detail, elements) => …)` devolve a função de cancelamento. Evento de estado é pegajoso: quem assina tarde recebe o último valor. `moment: true` não é pegajoso. `emit` com `detail` igual ao anterior é descartado.
+- `last(nome)` e `lastElements(nome)` leem o último valor. Em script de eventos, assinar com `fiezta.listen(nome, fn)` — o `fiezta.reset()` cancela.
+
+Eventos do YouTube (`core.common.js` + `core.mobile.js`/`core.desktop.js`, mesmo vocabulário nos dois sites): `pageChanged`, `trackChanged`, `playerStateChanged`, `adChanged`, `navigationChanged`, `queueChanged`, `playerVisibilityChanged` (`visible`, `hiddenAbove`, `hiddenBelow`, `roomAbove`), `searchResultsChanged`, `userInteracted` (momento). Seletor e evento nativo do site só aparecem nos núcleos. O núcleo recalcula no máximo a cada 100 ms. `m.youtube.com` usa o núcleo móvel; qualquer outro host do YouTube, o desktop.
+
+O barramento é injetado em todo documento, mesmo sem núcleo para a URL, então um pedaço sempre pode assinar.
+
+"Ainda está assistindo" (`still-watching.tweak.js`, só carro): o YouTube manda junto com o vídeo um `youThereRenderer` com o atraso do aviso (20 min no site móvel, 40 no desktop, contados da abertura do vídeo) e pausa 10 s depois de avisar. Qualquer `keyup` no `document` conta para o site como atividade: renova o tempo ocioso que ele informa ao servidor e cancela o aviso pendente. O tweak dispara esse `keyup` a cada 5 minutos de reprodução, pelo `timeupdate` do vídeo do player. Não recusa pausa nem clica em diálogo. O núcleo não trata `keyup` como `userInteracted`, então o sinal não solta o `player-scroll`.
+
 ## O contrato de controle remoto
 
 Referência completa: `docs/plans/44-contrato-de-controle-remoto.md`. Duas listas fechadas — o

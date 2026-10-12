@@ -25,6 +25,7 @@ stories were given.
 | CR-18 Reach any site from the car | [Extending what the car can do](04-extending.md) |
 | CR-19 Keep the controls on the driver's side | [What the car screen can do](03-car-screen.md) |
 | CR-20 Drag the full-screen controls out of the way | [What the car screen can do](03-car-screen.md) |
+| CR-21 YouTube does not stop to ask whether I am still watching | [YouTube in the car](01-youtube.md) |
 
 ## Not met yet
 
@@ -38,5 +39,6 @@ stories were given.
   can only be read from the APK, and its name and icon are still bound to a known id.
 - **CR-19** — not tried on a car with the steering wheel on the right.
 - **CR-20** — not built yet.
+- **CR-21** — built from YouTube's page code; not yet seen cancelling the question on the car.
 
 CR-7 to CR-16 and CR-18 are all there and doing what the user wants.
