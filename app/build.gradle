@@ -87,6 +87,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:2.2.21"
 
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20231013'
 
     // AndroidX comes FIRST on purpose. appcompat-v7 and androidx.appcompat ship
     // internal layouts under the same names (abc_screen_simple, abc_screen_content_include,

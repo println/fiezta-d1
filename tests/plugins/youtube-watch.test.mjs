@@ -2,18 +2,23 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { startPage } from './harness.mjs';
 
+const DESKTOP = [['youtube', 'core.common.js'], ['youtube', 'core.desktop.js']];
+const MOBILE = [['youtube', 'core.common.js'], ['youtube', 'core.mobile.js']];
+
 const VIDEO = { title: "Bee Gees - Stayin' Alive (Official Video)", author: 'beegees', video_id: 'I_izvAbhExY' };
 
 function watchPage({ withPlayerApi = true } = {}) {
   const page = startPage({
     fixture: 'youtube-watch.html',
     url: 'https://www.youtube.com/watch?v=I_izvAbhExY',
+    cores: DESKTOP,
     plugin: ['youtube', 'watch.events.js']
   });
   if (withPlayerApi) {
     page.document.getElementById('movie_player').getVideoData = () => VIDEO;
   }
   page.addMedia({ currentTime: 5, duration: 250 });
+  page.fireMediaEvent(page.document.querySelector('video'), 'loadedmetadata');
   return page;
 }
 
@@ -71,7 +76,7 @@ test('picking the next item in the queue clicks the next button', async () => {
 
 test('metadata comes from the player api of the page', async () => {
   const page = watchPage();
-  await page.waitFor(() => page.readings.length > 0);
+  await page.waitFor(() => page.readings.some((reading) => reading.title === VIDEO.title));
   const reading = page.lastReading();
   assert.equal(reading.title, VIDEO.title);
   assert.equal(reading.artist, VIDEO.author);
@@ -107,7 +112,7 @@ test('previous restarts the track when the page says there is none', async () =>
 
 test('the track id is the video id, so the same video is one track', async () => {
   const page = watchPage();
-  await page.waitFor(() => page.readings.length > 0);
+  await page.waitFor(() => page.readings.some((reading) => reading.trackId === 'I_izvAbhExY'));
   assert.equal(page.lastReading().trackId, 'I_izvAbhExY');
   page.close();
 });
@@ -116,15 +121,17 @@ test('the same video under another url and another title is still one track', as
   const localized = startPage({
     fixture: 'youtube-watch.html',
     url: 'https://m.youtube.com/watch?v=I_izvAbhExY&list=RDI_izvAbhExY&index=23&pp=8AUB',
+    cores: MOBILE,
     plugin: ['youtube', 'watch.events.js']
   });
   localized.document.getElementById('movie_player').getVideoData =
     () => ({ ...VIDEO, title: "Bee Gees - Stayin' Alive (Vídeo oficial)" });
   localized.addMedia({});
-  await localized.waitFor(() => localized.readings.length > 0);
+  localized.fireMediaEvent(localized.document.querySelector('video'), 'loadedmetadata');
+  await localized.waitFor(() => localized.readings.some((reading) => reading.trackId === 'I_izvAbhExY'));
 
   const plain = watchPage();
-  await plain.waitFor(() => plain.readings.length > 0);
+  await plain.waitFor(() => plain.readings.some((reading) => reading.trackId === 'I_izvAbhExY'));
 
   assert.equal(localized.lastReading().trackId, plain.lastReading().trackId);
   assert.notEqual(localized.lastReading().title, plain.lastReading().title);

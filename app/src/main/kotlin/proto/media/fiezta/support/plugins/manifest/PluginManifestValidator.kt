@@ -64,13 +64,16 @@ object PluginManifestValidator {
                     errors += "rule $index: universal match not allowed for installed plugins: $pattern"
                 }
             }
-            if (rule.events == null && rule.tweaks.isEmpty()) {
-                errors += "rule $index: must have events or tweaks"
+            if (rule.events == null && rule.tweaks.isEmpty() && rule.core.isEmpty()) {
+                errors += "rule $index: must have events, tweaks or core"
             }
             rule.events?.let { script ->
                 if (!isValidScriptName(script)) {
                     errors += "rule $index: invalid events script name: $script"
                 }
+            }
+            rule.core.filterNot(::isValidScriptName).forEach { script ->
+                errors += "rule $index: invalid core script name: $script"
             }
             rule.tweaks.forEachIndexed { tweakIndex, tweak ->
                 if (!isValidScriptName(tweak.script)) {

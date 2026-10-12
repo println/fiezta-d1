@@ -21,6 +21,18 @@ class PluginManifestValidatorTest {
     ) = PluginManifest(id, "YouTube", version, rules)
 
     @Test
+    fun ruleWithOnlyACoreIsValid() {
+        val rules = listOf(PluginRule(listOf("https://youtube.com/*"), null, emptyList(), listOf("core.js")))
+        assertTrue(PluginManifestValidator.errors(manifest(rules = rules), PluginOrigin.INSTALLED).isEmpty())
+    }
+
+    @Test
+    fun coreScriptNameCannotEscapeThePluginFolder() {
+        val rules = listOf(PluginRule(listOf("https://youtube.com/*"), null, emptyList(), listOf("../core.js")))
+        assertTrue(PluginManifestValidator.errors(manifest(rules = rules), PluginOrigin.INSTALLED).isNotEmpty())
+    }
+
+    @Test
     fun youtubeManifestIsValid() {
         val rules = listOf(
             PluginRule(

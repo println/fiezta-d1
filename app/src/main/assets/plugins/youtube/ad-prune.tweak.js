@@ -14,14 +14,27 @@
     return result;
   };
 
-  setInterval(function() {
-    var p = document.getElementById('movie_player');
-    if (!p || !p.classList || !p.classList.contains('ad-showing')) { return; }
-    var v = document.querySelector('video');
-    if (v && isFinite(v.duration) && v.duration > 0) {
-      try { v.currentTime = v.duration; } catch (e) {}
+  if (!window.fieztaPage) { return; }
+
+  function skipAd(elements) {
+    var video = elements.adVideo;
+    if (video && isFinite(video.duration) && video.duration > 0) {
+      try { video.currentTime = video.duration; } catch (e) {}
     }
-    var b = document.querySelector('.ytp-ad-skip-button, .ytp-skip-ad-button, .ytp-ad-skip-button-modern');
-    if (b) { b.click(); }
-  }, 500);
+    if (elements.skipButton) { elements.skipButton.click(); }
+  }
+
+  window.fieztaPage.on('youtube:adChanged', function(detail, elements) {
+    if (!detail.showing) { return; }
+    skipAd(elements);
+    var video = elements.adVideo;
+    if (video && !video.__fieztaAdPrune) {
+      video.__fieztaAdPrune = true;
+      ['durationchange', 'timeupdate'].forEach(function(type) {
+        video.addEventListener(type, function() {
+          if (window.fieztaPage.last('youtube:adChanged').showing) { skipAd(window.fieztaPage.lastElements('youtube:adChanged')); }
+        });
+      });
+    }
+  });
 })();

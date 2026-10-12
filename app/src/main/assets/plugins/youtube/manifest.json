@@ -1,9 +1,11 @@
 {
   "id": "youtube",
   "name": "YouTube",
-  "version": 1,
+  "version": 2,
   "voice": { "resource": "/results?search_query={searchTerms}", "script": "voice-search.js" },
   "rules": [
+    { "match": ["https://m.youtube.com/*"], "core": ["core.common.js", "core.mobile.js"] },
+    { "match": ["https://youtube.com/*", "https://*.youtube.com/*"], "core": ["core.common.js", "core.desktop.js"] },
     {
       "match": ["https://youtube.com/shorts/*", "https://*.youtube.com/shorts/*"],
       "events": "shorts.events.js"
@@ -15,10 +17,11 @@
     {
       "match": ["https://youtube.com/*", "https://*.youtube.com/*"],
       "tweaks": [
-        { "script": "unmute-player.tweak.js", "runAt": "ready", "rerun": "urlChange", "env": "car" },
+        { "script": "unmute-player.tweak.js", "runAt": "ready", "env": "car" },
         { "script": "ad-prune.tweak.js", "runAt": "start", "requires": "adblock", "env": "both" },
+        { "script": "still-watching.tweak.js", "runAt": "start", "env": "car" },
         {
-          "script": "player-scroll.tweak.js", "runAt": "loaded", "rerun": "urlChange", "env": "car",
+          "script": "player-scroll.tweak.js", "runAt": "loaded", "env": "car",
           "option": { "key": "pref_youtube_scroll_to_player", "default": true }
         }
       ]

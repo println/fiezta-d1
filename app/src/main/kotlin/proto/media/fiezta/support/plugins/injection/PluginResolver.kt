@@ -3,6 +3,7 @@ package proto.media.fiezta.support.plugins.injection
 import proto.media.fiezta.support.plugins.manifest.UrlMatch
 import proto.media.fiezta.support.plugins.model.PluginEnv
 import proto.media.fiezta.support.plugins.model.PluginManifest
+import proto.media.fiezta.support.plugins.model.ResolvedCore
 import proto.media.fiezta.support.plugins.model.ResolvedEvents
 import proto.media.fiezta.support.plugins.model.ResolvedTweak
 
@@ -18,6 +19,11 @@ class PluginResolver(private val stack: List<PluginManifest>) {
             }
         }
         return null
+    }
+
+    fun coresFor(url: String): List<ResolvedCore> = stack.flatMap { plugin ->
+        val rule = plugin.rules.firstOrNull { it.core.isNotEmpty() && it.match.any { pattern -> UrlMatch.matches(pattern, url) } }
+        rule?.core.orEmpty().map { ResolvedCore(plugin.id, it) }
     }
 
     fun tweaksFor(url: String, env: PluginEnv): List<ResolvedTweak> {

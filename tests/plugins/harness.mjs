@@ -24,6 +24,10 @@ function installLayout(window) {
   };
 }
 
+function installResizeObserver(window) {
+  window.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} };
+}
+
 // jsdom does not implement innerText. This approximation puts a line break between
 // block-level children, which is all the plugins rely on when reading page headers.
 function installInnerText(window) {
@@ -50,7 +54,7 @@ function installMediaSession(window) {
   };
 }
 
-export function startPage({ fixture, url = 'https://m.youtube.com/', plugin = null } = {}) {
+export function startPage({ fixture, url = 'https://m.youtube.com/', plugin = null, cores = [] } = {}) {
   const dom = new JSDOM(fixture ? readFixture(fixture) : '<!DOCTYPE html><html><body></body></html>', {
     url,
     runScripts: 'outside-only',
@@ -59,6 +63,7 @@ export function startPage({ fixture, url = 'https://m.youtube.com/', plugin = nu
   const { window } = dom;
   installLayout(window);
   installInnerText(window);
+  installResizeObserver(window);
   installMediaSession(window);
 
   const readings = [];
@@ -74,6 +79,8 @@ export function startPage({ fixture, url = 'https://m.youtube.com/', plugin = nu
     onHandlersChanged: (names) => handlerNames.push(names === '' ? [] : names.split(','))
   };
 
+  window.eval(scriptOf('fiezta-page.js'));
+  cores.forEach((core) => window.eval(scriptOf(...core)));
   window.eval(scriptOf('fiezta-runtime.js'));
   if (plugin) window.eval(scriptOf(...plugin));
 
@@ -81,6 +88,8 @@ export function startPage({ fixture, url = 'https://m.youtube.com/', plugin = nu
     window,
     document: window.document,
     fiezta: window.fiezta,
+    bus: window.fieztaPage,
+    load: (...parts) => window.eval(scriptOf(...parts)),
     readings,
     queues,
     searchResults,
