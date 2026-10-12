@@ -5,7 +5,11 @@ import android.os.Looper
 import android.webkit.JavascriptInterface
 import proto.media.fiezta.support.plugins.contract.PluginPageListener
 
-class PluginHandlersBridge(private val listener: PluginPageListener, private val showToast: (String) -> Unit) {
+class PluginHandlersBridge(
+    private val listener: PluginPageListener,
+    private val showToast: (String) -> Unit,
+    private val feedback: (defaultText: String) -> Unit
+) {
 
     private val mainHandler = Handler(Looper.getMainLooper())
 
@@ -18,6 +22,11 @@ class PluginHandlersBridge(private val listener: PluginPageListener, private val
     @JavascriptInterface
     fun showToast(text: String) {
         mainHandler.post { showToast.invoke(text) }
+    }
+
+    @JavascriptInterface
+    fun feedback(name: String, defaultText: String) {
+        mainHandler.post { feedback.invoke(defaultText) }
     }
 
     @JavascriptInterface

@@ -138,3 +138,18 @@ test('the same video under another url and another title is still one track', as
   localized.close();
   plain.close();
 });
+
+test('each wheel key gives feedback of what it did', async () => {
+  const page = watchPage();
+  page.fiezta.dispatch('nextClick');
+  page.fiezta.dispatch('previousClick');
+  page.fiezta.dispatch('nextLongPress');
+  page.fiezta.dispatch('previousLongPress');
+  assert.deepEqual(page.feedbacks, [
+    ['youtube:nextVideo', 'Next video'],
+    ['youtube:restartingVideo', 'Restarting video'],
+    ['youtube:seekingForward', 'Forward 10 seconds'],
+    ['youtube:seekingBackward', 'Back 10 seconds']
+  ]);
+  page.close();
+});

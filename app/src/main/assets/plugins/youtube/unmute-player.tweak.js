@@ -16,5 +16,6 @@
     if (player && typeof player.unMute === 'function') { player.unMute(); }
     video.muted = false;
     if (video.volume === 0) { video.volume = 1; }
+    window.fieztaPage.feedback('youtube:unmuted', 'Sound turned on');
   }
 })();

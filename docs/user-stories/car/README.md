@@ -28,6 +28,8 @@ stories were given.
 | CR-21 YouTube does not stop to ask whether I am still watching | [YouTube in the car](01-youtube.md) |
 | CR-22 The settings panel closes by itself | [What the car screen can do](03-car-screen.md) |
 | CR-23 Each site has its colour on the bookmarks bar | [What the car screen can do](03-car-screen.md) |
+| CR-24 The car tells me what a plugin just did | [Extending what the car can do](04-extending.md) |
+| CR-25 Edit the address of the page | [What the car screen can do](03-car-screen.md) |
 
 ## Not met yet
 
@@ -44,5 +46,7 @@ stories were given.
 - **CR-21** — built from YouTube's page code; not yet seen cancelling the question on the car.
 - **CR-22** — built; not tried on the DHU or in the car.
 - **CR-23** — built; seen on the emulator, not tried in the car.
+- **CR-24** — built; seen on the DHU, not tried in the car, and the notices are in English only.
+- **CR-25** — built; seen on the DHU, not tried in the car.
 
 CR-7 to CR-16 and CR-18 are all there and doing what the user wants.

@@ -16,6 +16,14 @@
 
   if (!window.fieztaPage) { return; }
 
+  var told = false;
+
+  function tellSkip() {
+    if (told) { return; }
+    told = true;
+    window.fieztaPage.feedback('youtube:skippingAd', 'Skipping ad');
+  }
+
   function skipAd(elements) {
     var video = elements.adVideo;
     if (video && isFinite(video.duration) && video.duration > 0) {
@@ -25,7 +33,11 @@
   }
 
   window.fieztaPage.on('youtube:adChanged', function(detail, elements) {
-    if (!detail.showing) { return; }
+    if (!detail.showing) {
+      told = false;
+      return;
+    }
+    tellSkip();
     skipAd(elements);
     var video = elements.adVideo;
     if (video && !video.__fieztaAdPrune) {

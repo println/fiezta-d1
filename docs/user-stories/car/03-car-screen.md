@@ -67,7 +67,32 @@ with a message.
 > in use is highlighted, and the voice panel opens over the tiles.
 > **And** the engine column and the voice tile follow the steering wheel (CR-19).
 
+> **Given** the search screen
+> **When** I tap an engine
+> **Then** the column scrolls to bring it to the middle.
+
 **There.** Closing the voice panel goes back to the tiles instead of opening the keyboard.
+
+## CR-25 — Edit the address of the page
+
+> **As a** driver
+> **I want** to see the address of the page that is open and change it
+> **So that** I go somewhere close to where I am without typing the whole address again.
+
+> **Given** the search screen
+> **Then** a URL tile, half the size of an engine's, sits above the engines, always first.
+> **When** I tap it
+> **Then** the search box shows the address of the page that is open, with the keyboard up,
+> **and** confirming goes to what is in the box.
+> **And** voice is not offered while the URL tile is picked: the microphone and the voice tile
+> are gone, and listening stops if it was on.
+
+> **Given** the URL tile is picked
+> **When** I tap an engine
+> **Then** the box is emptied and voice is offered again.
+
+**There, not seen on the car yet.** The screen never opens on the URL tile; it has to be
+tapped.
 
 ## CR-13 — Choose where the toolbar sits
 

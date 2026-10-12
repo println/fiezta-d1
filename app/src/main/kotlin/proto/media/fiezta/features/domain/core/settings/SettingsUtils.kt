@@ -30,6 +30,7 @@ object SettingsUtils {
     const val KEY_DEFAULT_FAVORITES_SEEDED = "pref_default_favorites_seeded"
     const val KEY_VOICE_PLUGIN = "pref_voice_plugin"
     const val KEY_UPDATE_NOTICE = "pref_update_notice"
+    const val KEY_PLUGIN_FEEDBACK = "pref_plugin_feedback"
 
     const val DEFAULT_HOME_URL = "https://m.youtube.com"
 
@@ -93,6 +94,14 @@ object SettingsUtils {
 
     fun isSearchSuggestionsEnabled(context: Context): Boolean {
         return prefs(context).getBoolean(KEY_SEARCH_SUGGESTIONS, true)
+    }
+
+    fun isPluginFeedbackEnabled(context: Context): Boolean {
+        return prefs(context).getBoolean(KEY_PLUGIN_FEEDBACK, true)
+    }
+
+    fun setPluginFeedbackEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_PLUGIN_FEEDBACK, enabled).apply()
     }
 
     fun isUpdateNoticeEnabled(context: Context): Boolean {

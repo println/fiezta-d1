@@ -37,3 +37,33 @@ way too.
 > **and** either can be given by typing or by voice.
 
 **There.**
+
+## CR-24 — The car tells me what a plugin just did
+
+> **As a** driver
+> **I want** a short notice on the car screen when a plugin acts on the page
+> **So that** I know why the page changed without having touched it.
+
+> **Given** YouTube in the car and plugin feedback on, the default
+> **When** an ad is skipped
+> **Then** the screen says so, once for that ad.
+> **When** the page is scrolled back to the player after a track change
+> **Then** the screen says so, once for that track.
+> **When** a video that started muted gets its sound back
+> **Then** the screen says so.
+> **And** keeping YouTube from asking whether I am still watching (CR-21) is never announced.
+
+> **Given** YouTube in the car and plugin feedback on
+> **When** I press a key of the steering wheel and the plugin acts on it
+> **Then** the screen says what it did: next or previous video, restarting the video, ten
+> seconds forward or back, skipping the ad, and on shorts the next or the previous short.
+> **And** a key that had nothing to do, like "next" on the last short, says nothing.
+
+> **Given** plugin feedback is off (PH-13)
+> **Then** the plugins act the same and the screen says nothing.
+
+> **Given** a feature of a plugin is off, or its requirement is not met
+> **Then** it does not act and there is no notice for it.
+
+**There, not seen on the car yet.** The notices are in English whatever the language of the
+app.

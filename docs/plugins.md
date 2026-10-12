@@ -402,7 +402,16 @@ Todo script de eventos roda depois de `assets/plugins/fiezta-runtime.js`, que ex
   `queueProvider` e o último JSON de fila publicado.
 
 Um script de tweak não usa `fiezta` — é JS livre, avaliado uma vez (ou a cada URL,
-conforme `rerun`) na página.
+conforme `rerun`) na página. Para dar feedback ao motorista do que fez, chama
+`window.fieztaPage.feedback('<id>:<codigoDaAcao>', 'Default text in English')`: o prefixo é o id
+do plugin, o código identifica a ação (é por ele que uma tradução entra depois) e o texto em
+inglês é o que aparece hoje. O feedback vira um toast só no carro, e a opção "Feedback do
+plugin", no menu da tela de Plugins do celular, desliga o de todos os plugins. Três tweaks do
+YouTube dão feedback: `skippingAd` uma vez por anúncio, `scrollingToPlayer` uma vez por faixa
+trazida de volta e `unmuted` ao tirar o mudo. O `still-watching` age calado. Os scripts de
+eventos chamam a mesma função a cada tecla do volante que de fato fez algo: `nextVideo`,
+`previousVideo`, `restartingVideo`, `seekingForward`, `seekingBackward` e `skippingAd` em
+`watch.events.js`; `nextShort` e `previousShort` em `shorts.events.js`.
 
 ## Onde ficam
 

@@ -335,7 +335,7 @@ object CarPlayer : JavascriptCallback.JSCallbacks, MediaControlBridge.Callbacks,
         browser.addBridge(MEDIA_CONTROL_INTERFACE, MediaControlBridge(this))
         browser.addBridge(
             PLUGIN_HANDLERS_INTERFACE,
-            PluginHandlersBridge(pluginInjector) { text -> toast(text) }
+            PluginHandlersBridge(pluginInjector, ::toast, ::feedback)
         )
     }
 
@@ -445,6 +445,10 @@ object CarPlayer : JavascriptCallback.JSCallbacks, MediaControlBridge.Callbacks,
 
     private fun toast(text: String) {
         browser.screenView?.let { showCarToast(it, text) }
+    }
+
+    private fun feedback(defaultText: String) {
+        if (SettingsUtils.isPluginFeedbackEnabled(appContext)) toast(defaultText)
     }
 
     private fun initialUrl(): String {

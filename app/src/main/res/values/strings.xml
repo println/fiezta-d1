@@ -55,6 +55,9 @@
     <string name="car_settings_jump_to_letter">Jump to letter</string>
     <string name="car_settings_home_set">Home page: %1$s</string>
     <string name="car_settings_jump_label">A–Z</string>
+    <string name="car_search_url" translatable="false">URL</string>
+    <string name="car_search_hint_url">Type URL</string>
+    <string name="car_search_title_url">Editing URL</string>
     <string name="car_search_hint_youtube">Search YouTube or type URL</string>
     <string name="car_search_hint_google">Search Google or type URL</string>
     <string name="car_search_hint_duckduckgo">Search DuckDuckGo or type URL</string>
@@ -277,6 +280,7 @@
     <string name="voice_listener_title">Voice listener</string>
     <string name="voice_listener_summary">Only one plugin can answer voice commands from the car.</string>
     <string name="plugins_requires_ad_block">requires ad blocking</string>
+    <string name="plugins_feedback">Plugin feedback</string>
     <string name="plugins_delete_message">Delete the plugin %1$s?</string>
     <string name="plugins_restore_defaults_message">Restore the built-in plugins?</string>
     <string name="page_plugins_events_section">Steering wheel events</string>

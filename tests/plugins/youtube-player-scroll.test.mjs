@@ -88,3 +88,14 @@ test('nothing moves outside a watch page', () => {
   assert.equal(scrolled, 0);
   page.close();
 });
+
+test('bringing the player back gives feedback once per track', async () => {
+  const page = watchPage();
+  selectTrack(page, 1);
+  await page.waitFor(() => page.bus.last('youtube:queueChanged').cursor === 1);
+  page.siteScrollsTo(307);
+  page.siteScrollsTo(120);
+  assert.equal(page.scrollY(), 0);
+  assert.deepEqual(page.feedbacks, [['youtube:scrollingToPlayer', 'Scrolling to the player']]);
+  page.close();
+});

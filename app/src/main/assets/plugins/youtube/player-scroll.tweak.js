@@ -7,6 +7,7 @@
   var videoId = null;
   var cursor = null;
   var visibility = null;
+  var told = false;
 
   window.fieztaPage.on('youtube:pageChanged', function(detail) {
     onWatch = detail.kind === 'watch';
@@ -30,14 +31,23 @@
 
   function keepInView() {
     keeping = true;
+    told = false;
     reveal();
+  }
+
+  function tellScroll() {
+    if (told) { return; }
+    told = true;
+    window.fieztaPage.feedback('youtube:scrollingToPlayer', 'Scrolling to the player');
   }
 
   function reveal() {
     if (!keeping || !onWatch || !visibility) { return; }
     if (visibility.hiddenAbove > 0) {
+      tellScroll();
       window.scrollBy(0, -visibility.hiddenAbove);
     } else if (visibility.hiddenBelow > 0 && visibility.roomAbove > 0) {
+      tellScroll();
       window.scrollBy(0, Math.min(visibility.hiddenBelow, visibility.roomAbove));
     }
   }

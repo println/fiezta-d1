@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import proto.media.fiezta.R
 import proto.media.fiezta.features.domain.core.bookmarks.BookmarkMonogram
+import proto.media.fiezta.features.domain.core.settings.SettingsUtils
 import proto.media.fiezta.support.plugins.model.PluginManifest
 import proto.media.fiezta.support.plugins.model.PluginOrigin
 import proto.media.fiezta.support.plugins.manifest.PluginPlatforms
@@ -60,6 +61,10 @@ class PluginsPhoneActivity : AppCompatActivity() {
             .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         menu.add(Menu.NONE, MENU_VOICE_LISTENER, Menu.NONE, R.string.voice_listener_title)
             .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        menu.add(Menu.NONE, MENU_FEEDBACK, Menu.NONE, R.string.plugins_feedback)
+            .setCheckable(true)
+            .setChecked(SettingsUtils.isPluginFeedbackEnabled(this))
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         menu.add(Menu.NONE, MENU_RESTORE_DEFAULTS, Menu.NONE, R.string.plugins_restore_defaults)
             .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         return true
@@ -76,6 +81,11 @@ class PluginsPhoneActivity : AppCompatActivity() {
         }
         MENU_VOICE_LISTENER -> {
             startActivity(Intent(this, VoiceListenerPhoneActivity::class.java))
+            true
+        }
+        MENU_FEEDBACK -> {
+            item.isChecked = !item.isChecked
+            SettingsUtils.setPluginFeedbackEnabled(this, item.isChecked)
             true
         }
         MENU_RESTORE_DEFAULTS -> {
@@ -227,5 +237,6 @@ class PluginsPhoneActivity : AppCompatActivity() {
         private const val MENU_INSTALL = 1
         private const val MENU_RESTORE_DEFAULTS = 2
         private const val MENU_VOICE_LISTENER = 3
+        private const val MENU_FEEDBACK = 4
     }
 }

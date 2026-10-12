@@ -75,3 +75,11 @@ test('fiezta.reset cancels the subscriptions of the events script', () => {
   assert.deepEqual(received, ['watch']);
   page.close();
 });
+
+test('a feedback reaches the app with its plugin prefix and its default text', () => {
+  const { page, bus: fieztaPage } = bus();
+  fieztaPage.feedback('site:skippingAd', 'Skipping ad');
+  assert.deepEqual(page.feedbacks, [['site:skippingAd', 'Skipping ad']]);
+  assert.throws(() => fieztaPage.feedback('skippingAd', 'Skipping ad'));
+  page.close();
+});

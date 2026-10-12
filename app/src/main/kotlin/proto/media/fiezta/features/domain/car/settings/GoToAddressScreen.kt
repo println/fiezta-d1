@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
+import android.widget.ScrollView
 import android.widget.TextView
 import proto.media.fiezta.R
 import proto.media.fiezta.features.domain.car.browser.CarEditText
@@ -29,7 +30,8 @@ class GoToAddressScreen(
     private val context: Context,
     private var engine: SearchEngine,
     private val engines: List<SearchEngine>,
-    private val onEngineChanged: (SearchEngine) -> Unit,
+    private val currentUrl: () -> String?,
+    private val onTitleChanged: (Int) -> Unit,
     private val startWithVoice: Boolean,
     private val bindKeyboard: (CarEditText) -> Unit,
     private val unbindKeyboard: () -> Unit,
@@ -40,14 +42,17 @@ class GoToAddressScreen(
 ) : CarSettingsScreen {
 
     override val titleRes: Int
-        get() = engine.texts.titleRes
+        get() = if (editingUrl) R.string.car_search_title_url else engine.texts.titleRes
 
     private val searchSuggestClient = SearchSuggestClient("go-to-address-suggest", SEARCH_DEBOUNCE_MILLIS)
     private lateinit var editText: CarEditText
     private lateinit var voiceOverlay: VoiceOverlay
     private lateinit var modes: View
+    private lateinit var voiceButton: View
     private lateinit var voiceMode: View
     private lateinit var keyboardMode: View
+    private lateinit var engineScroll: ScrollView
+    private lateinit var urlButton: View
     private lateinit var engineButtons: Map<SearchEngine, View>
     private lateinit var suggestionRows: List<View>
     private lateinit var suggestionIcons: List<ImageView>
@@ -61,6 +66,8 @@ class GoToAddressScreen(
         }
     private val listening get() = inputMode == InputMode.VOICE
     private var navigated = false
+    private var editingUrl = false
+    private val addressTextWatcher = AddressTextWatcher()
 
     override fun createView(inflater: LayoutInflater, parent: ViewGroup): View {
         val view = inflater.inflate(R.layout.car_settings_go_to_address, parent, false)
@@ -72,8 +79,10 @@ class GoToAddressScreen(
         )
         voiceLabel = view.findViewById(R.id.go_to_address_voice_label)
         modes = view.findViewById(R.id.go_to_address_modes)
-        engineButtons = createEngineButtons(inflater, view.findViewById(R.id.go_to_address_engines))
-        showEngine()
+        val engineColumn = view.findViewById<ViewGroup>(R.id.go_to_address_engines)
+        engineScroll = engineColumn.parent as ScrollView
+        urlButton = createUrlButton(inflater, engineColumn)
+        engineButtons = createEngineButtons(inflater, engineColumn)
 
         val suggestionsContainer = view.findViewById<ViewGroup>(R.id.go_to_address_suggestions)
         val rows = (0 until MAX_ROWS).map {
@@ -84,11 +93,12 @@ class GoToAddressScreen(
         suggestionIcons = rows.map { it.findViewById(R.id.suggestion_icon) }
         suggestionTexts = rows.map { it.findViewById(R.id.suggestion_text) }
 
-        editText.addTextChangedListener(AddressTextWatcher())
+        editText.addTextChangedListener(addressTextWatcher)
         editText.setOnClickListener { enterTextMode() }
         editText.setOnEditorActionListener { _, actionId, event -> onEditorAction(actionId, event) }
 
-        view.findViewById<View>(R.id.go_to_address_voice_button).setOnClickListener {
+        voiceButton = view.findViewById(R.id.go_to_address_voice_button)
+        voiceButton.setOnClickListener {
             if (listening) enterTextMode() else enterVoiceMode()
         }
         voiceMode = view.findViewById(R.id.go_to_address_voice_mode)
@@ -96,41 +106,101 @@ class GoToAddressScreen(
         keyboardMode = view.findViewById(R.id.go_to_address_keyboard_mode)
         keyboardMode.setOnClickListener { enterTextMode() }
 
+        showSelection()
         renderRows(emptyList())
         return view
     }
 
-    private fun createEngineButtons(inflater: LayoutInflater, column: ViewGroup): Map<SearchEngine, View> =
-        engines.associateWith { buttonEngine ->
-            val button = inflater.inflate(R.layout.car_search_engine_tile, column, false)
-            button.findViewById<ImageView>(R.id.engine_button_icon).setImageResource(buttonEngine.texts.iconRes)
-            button.findViewById<TextView>(R.id.engine_button_label).setText(buttonEngine.texts.nameRes)
-            button.contentDescription = context.getString(buttonEngine.texts.titleRes)
-            button.setOnClickListener { selectEngine(buttonEngine) }
-            column.addView(button)
-            button
+    private fun createUrlButton(inflater: LayoutInflater, column: ViewGroup): View =
+        createTile(
+            inflater, column, R.layout.car_search_url_tile,
+            R.drawable.ic_search_url, R.string.car_search_url, R.string.car_search_title_url
+        ).apply {
+            setOnClickListener {
+                centerInColumn(this)
+                selectUrl()
+            }
         }
 
+    private fun createEngineButtons(inflater: LayoutInflater, column: ViewGroup): Map<SearchEngine, View> =
+        engines.associateWith { buttonEngine ->
+            val texts = buttonEngine.texts
+            createTile(inflater, column, R.layout.car_search_engine_tile, texts.iconRes, texts.nameRes, texts.titleRes)
+                .apply {
+                    setOnClickListener {
+                        centerInColumn(this)
+                        selectEngine(buttonEngine)
+                    }
+                }
+        }
+
+    private fun createTile(
+        inflater: LayoutInflater,
+        column: ViewGroup,
+        layoutRes: Int,
+        iconRes: Int,
+        nameRes: Int,
+        titleRes: Int
+    ): View {
+        val tile = inflater.inflate(layoutRes, column, false)
+        tile.findViewById<ImageView>(R.id.engine_button_icon).setImageResource(iconRes)
+        tile.findViewById<TextView>(R.id.engine_button_label).setText(nameRes)
+        tile.contentDescription = context.getString(titleRes)
+        column.addView(tile)
+        return tile
+    }
+
+    private fun centerInColumn(tile: View) {
+        val tileCenter = tile.top + tile.height / 2
+        engineScroll.smoothScrollTo(0, tileCenter - engineScroll.height / 2)
+    }
+
+    private fun selectUrl() {
+        if (editingUrl) return
+        editingUrl = true
+        showSelection()
+        onTitleChanged(titleRes)
+        showCurrentUrl()
+        enterTextMode()
+    }
+
+    private fun showCurrentUrl() {
+        val url = currentUrl().orEmpty()
+        editText.removeTextChangedListener(addressTextWatcher)
+        editText.setText(url)
+        editText.setSelection(url.length)
+        editText.addTextChangedListener(addressTextWatcher)
+        renderRows(emptyList())
+    }
+
     private fun selectEngine(selected: SearchEngine) {
-        if (selected == engine) return
+        if (!editingUrl && selected == engine) return
+        if (editingUrl) editText.text.clear()
+        editingUrl = false
         engine = selected
-        showEngine()
-        onEngineChanged(engine)
+        showSelection()
+        onTitleChanged(titleRes)
         updateSuggestions(editText.text.toString())
         if (!listening) enterTextMode()
     }
 
-    private fun showEngine() {
-        editText.hint = context.getString(engine.texts.hintRes)
+    private fun showSelection() {
+        val hintRes = if (editingUrl) R.string.car_search_hint_url else engine.texts.hintRes
+        editText.hint = context.getString(hintRes)
         voiceLabel.setText(engine.texts.listeningRes)
-        engineButtons.forEach { (buttonEngine, button) ->
-            val isSelected = buttonEngine == engine
-            button.isSelected = isSelected
-            button.isActivated = isSelected
-            button.findViewById<ImageView>(R.id.engine_button_icon).apply {
-                colorFilter = if (isSelected) null else GRAYSCALE
-                alpha = if (isSelected) 1f else UNSELECTED_ENGINE_ALPHA
-            }
+        val voiceVisibility = if (editingUrl) View.GONE else View.VISIBLE
+        voiceButton.visibility = voiceVisibility
+        voiceMode.visibility = voiceVisibility
+        highlight(urlButton, editingUrl)
+        engineButtons.forEach { (buttonEngine, button) -> highlight(button, !editingUrl && buttonEngine == engine) }
+    }
+
+    private fun highlight(tile: View, isSelected: Boolean) {
+        tile.isSelected = isSelected
+        tile.isActivated = isSelected
+        tile.findViewById<ImageView>(R.id.engine_button_icon).apply {
+            colorFilter = if (isSelected) null else GRAYSCALE
+            alpha = if (isSelected) 1f else UNSELECTED_ENGINE_ALPHA
         }
     }
 

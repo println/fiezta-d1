@@ -10,12 +10,18 @@
 
   fiezta.on('nextClick', function() {
     var button = navigationButton('nextButton');
-    if (button && !button.disabled) { button.click(); }
+    if (button && !button.disabled) {
+      button.click();
+      window.fieztaPage.feedback('youtube:nextShort', 'Next short');
+    }
   });
 
   fiezta.on('previousClick', function() {
     var button = navigationButton('previousButton');
-    if (button && !button.disabled) { button.click(); }
+    if (button && !button.disabled) {
+      button.click();
+      window.fieztaPage.feedback('youtube:previousShort', 'Previous short');
+    }
   });
 
   fiezta.listen('youtube:navigationChanged', function(detail) {

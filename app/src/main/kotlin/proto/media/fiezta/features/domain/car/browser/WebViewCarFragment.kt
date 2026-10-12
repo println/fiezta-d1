@@ -78,7 +78,6 @@ import proto.media.fiezta.support.media.contract.MediaClient
 import proto.media.fiezta.support.media.dto.MediaEventDto
 import proto.media.fiezta.support.webviewex.WebViewExChromeClient
 import proto.media.fiezta.shared.search.SearchEngineSource
-import proto.media.fiezta.shared.search.texts
 import proto.media.fiezta.support.system.DrmDiagnostics
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
@@ -595,7 +594,8 @@ class WebViewCarFragment : CarFragment(), MainCarActivity.ActivityCallbacks,
                 context!!,
                 engine = engine,
                 engines = searchEngines.engines,
-                onEngineChanged = { settingsNavigator.setTitle(it.texts.titleRes) },
+                currentUrl = { CarPlayer.browser.url },
+                onTitleChanged = { settingsNavigator.setTitle(it) },
                 startWithVoice = startWithVoice,
                 bindKeyboard = { editText -> mainCarActivity.a().startInput(editText) },
                 unbindKeyboard = { mainCarActivity.a().stopInput() },

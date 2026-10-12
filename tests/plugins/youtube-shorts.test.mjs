@@ -55,3 +55,11 @@ test('the track id of a short comes from its url', async () => {
   assert.equal(page.lastReading().trackId, 'abc123');
   page.close();
 });
+
+test('a wheel key gives feedback only when its button was clicked', async () => {
+  const page = shortsPage();
+  page.fiezta.dispatch('previousClick');
+  page.fiezta.dispatch('nextClick');
+  assert.deepEqual(page.feedbacks, [['youtube:nextShort', 'Next short']]);
+  page.close();
+});

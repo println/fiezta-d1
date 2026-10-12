@@ -8,6 +8,9 @@
     <dimen name="car_search_engine_icon_padding">12dp</dimen>
     <dimen name="car_search_engine_column_width">112dp</dimen>
     <dimen name="car_search_engine_tile_height">104dp</dimen>
+    <dimen name="car_search_url_tile_height">52dp</dimen>
+    <dimen name="car_search_url_circle_size">26dp</dimen>
+    <dimen name="car_search_url_icon_padding">6dp</dimen>
     <dimen name="car_search_box_height">64dp</dimen>
     <dimen name="car_search_box_radius">32dp</dimen>
     <dimen name="car_search_mode_icon_size">64dp</dimen>

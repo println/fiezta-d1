@@ -71,3 +71,13 @@ test('once the ad is over the video is left alone', async () => {
   assert.equal(video.currentTime, 3);
   page.close();
 });
+
+test('each skipped ad gives feedback once', async () => {
+  const page = adPage();
+  const { video } = showAd(page);
+  await page.waitFor(() => video.currentTime === 15, 500);
+  video.currentTime = 3;
+  page.fireMediaEvent(video, 'timeupdate');
+  assert.deepEqual(page.feedbacks, [['youtube:skippingAd', 'Skipping ad']]);
+  page.close();
+});

@@ -47,3 +47,13 @@ test('muting while it plays is the choice of the user and stays', async () => {
   assert.equal(video.muted, true);
   page.close();
 });
+
+test('unmuting gives feedback', async () => {
+  const page = watchPage();
+  const video = page.document.querySelector('video');
+  video.muted = true;
+  play(page, video);
+  await page.waitFor(() => !video.muted, 500);
+  assert.deepEqual(page.feedbacks, [['youtube:unmuted', 'Sound turned on']]);
+  page.close();
+});

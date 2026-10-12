@@ -6,6 +6,7 @@
   var queue = null;
 
   function elementsOf(name) { return bus.lastElements('youtube:' + name) || {}; }
+  function feedback(code, text) { bus.feedback('youtube:' + code, text); }
 
   function publishAvailability() {
     var available = {};
@@ -45,24 +46,42 @@
 
   fiezta.on('nextClick', function() {
     var ads = elementsOf('adChanged');
-    if (ads.skipButton) { ads.skipButton.click(); return; }
-    if (ads.adVideo && isFinite(ads.adVideo.duration)) { ads.adVideo.currentTime = ads.adVideo.duration; return; }
+    if (ads.skipButton) {
+      ads.skipButton.click();
+      feedback('skippingAd', 'Skipping ad');
+      return;
+    }
+    if (ads.adVideo && isFinite(ads.adVideo.duration)) {
+      ads.adVideo.currentTime = ads.adVideo.duration;
+      feedback('skippingAd', 'Skipping ad');
+      return;
+    }
     var next = elementsOf('navigationChanged').nextButton;
     if (next) {
-      if (navigation.next) { next.click(); }
+      if (navigation.next) {
+        next.click();
+        feedback('nextVideo', 'Next video');
+      }
       return;
     }
     var player = elementsOf('trackChanged').player;
-    if (player && typeof player.nextVideo === 'function') { player.nextVideo(); }
+    if (player && typeof player.nextVideo === 'function') {
+      player.nextVideo();
+      feedback('nextVideo', 'Next video');
+    }
   });
 
   fiezta.on('previousClick', function() {
     var previous = elementsOf('navigationChanged').previousButton;
     if (previous && navigation.previous) {
       previous.click();
+      feedback('previousVideo', 'Previous video');
     } else {
       var video = elementsOf('playerStateChanged').video;
-      if (video) { video.currentTime = 0; }
+      if (video) {
+        video.currentTime = 0;
+        feedback('restartingVideo', 'Restarting video');
+      }
     }
   });
 
@@ -86,8 +105,14 @@
     setTimeout(function() { tapPlayerSide(forward); }, 200);
   }
 
-  fiezta.on('nextLongPress', function() { doubleTapSeek(true); });
-  fiezta.on('previousLongPress', function() { doubleTapSeek(false); });
+  fiezta.on('nextLongPress', function() {
+    doubleTapSeek(true);
+    feedback('seekingForward', 'Forward 10 seconds');
+  });
+  fiezta.on('previousLongPress', function() {
+    doubleTapSeek(false);
+    feedback('seekingBackward', 'Back 10 seconds');
+  });
 
   function queueEntry(entry, quality) {
     return { title: entry.title, subtitle: entry.subtitle, artwork: thumbnailOf(entry.videoId, quality) };

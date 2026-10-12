@@ -39,6 +39,10 @@
         if (index >= 0) { list.splice(index, 1); }
       };
     },
+    feedback: function(name, text) {
+      if (!isNamespaced(name)) { throw new Error('fieztaPage feedback needs a plugin prefix: ' + name); }
+      if (window.fieztaplugins && window.fieztaplugins.feedback) { window.fieztaplugins.feedback(String(name), String(text)); }
+    },
     last: function(name) {
       return last[name] ? last[name].detail : undefined;
     },

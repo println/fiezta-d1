@@ -70,13 +70,17 @@ export function startPage({ fixture, url = 'https://m.youtube.com/', plugin = nu
   const queues = [];
   const searchResults = [];
   const handlerNames = [];
+  const toasts = [];
+  const feedbacks = [];
   window.mediacontrol = {
     onReading: (json) => readings.push(JSON.parse(json)),
     onQueue: (json) => queues.push(JSON.parse(json)),
     onSearchResult: (found) => searchResults.push(found)
   };
   window.fieztaplugins = {
-    onHandlersChanged: (names) => handlerNames.push(names === '' ? [] : names.split(','))
+    onHandlersChanged: (names) => handlerNames.push(names === '' ? [] : names.split(',')),
+    showToast: (text) => toasts.push(text),
+    feedback: (name, text) => feedbacks.push([name, text])
   };
 
   window.eval(scriptOf('fiezta-page.js'));
@@ -94,6 +98,8 @@ export function startPage({ fixture, url = 'https://m.youtube.com/', plugin = nu
     queues,
     searchResults,
     handlerNames,
+    toasts,
+    feedbacks,
     lastReading: () => readings[readings.length - 1],
     lastQueue: () => queues[queues.length - 1],
     lastHandlers: () => handlerNames[handlerNames.length - 1] || [],
