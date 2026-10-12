@@ -35,3 +35,15 @@ test('a video the user left unmuted is left alone', async () => {
   assert.equal(video.volume, 0.3);
   page.close();
 });
+
+test('muting while it plays is the choice of the user and stays', async () => {
+  const page = watchPage();
+  const video = page.document.querySelector('video');
+  play(page, video);
+  await page.waitFor(() => page.bus.last('youtube:playerStateChanged').state === 'playing', 500);
+  video.muted = true;
+  page.fireMediaEvent(video, 'volumechange');
+  await page.waitFor(() => page.bus.last('youtube:playerStateChanged').muted === true, 500);
+  assert.equal(video.muted, true);
+  page.close();
+});

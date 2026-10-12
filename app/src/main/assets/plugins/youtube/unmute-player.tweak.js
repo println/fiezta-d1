@@ -3,9 +3,12 @@
   window.__fieztaUnmutePlayer = true;
 
   var onWatch = false;
+  var state = null;
   window.fieztaPage.on('youtube:pageChanged', function(detail) { onWatch = detail.kind === 'watch'; });
   window.fieztaPage.on('youtube:playerStateChanged', function(detail, elements) {
-    if (onWatch && detail.state === 'playing' && detail.muted) { unmute(elements.video, elements.player); }
+    var startedPlaying = detail.state === 'playing' && state !== 'playing';
+    state = detail.state;
+    if (onWatch && startedPlaying && detail.muted) { unmute(elements.video, elements.player); }
   });
 
   function unmute(video, player) {
