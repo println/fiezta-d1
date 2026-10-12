@@ -6,7 +6,7 @@ const CORES = [['youtube', 'core.common.js'], ['youtube', 'core.mobile.js']];
 const PLAYER_HEIGHT = 200;
 const SCREEN_HEIGHT = 400;
 
-function watchPage() {
+function watchPage({ screenHeight = SCREEN_HEIGHT } = {}) {
   const page = startPage({
     fixture: 'youtube-playlist.html',
     url: 'https://m.youtube.com/watch?v=I_izvAbhExY&list=RDI_izvAbhExY',
@@ -18,8 +18,11 @@ function watchPage() {
   player.getBoundingClientRect = () => ({
     top: -scrollY, bottom: PLAYER_HEIGHT - scrollY, height: PLAYER_HEIGHT, width: 300, left: 0, right: 300
   });
-  Object.defineProperty(window, 'innerHeight', { value: SCREEN_HEIGHT });
+  Object.defineProperty(window, 'innerHeight', { value: screenHeight });
+  let scrolls = 0;
+  page.scrolls = () => scrolls;
   window.scrollBy = (_x, y) => {
+    scrolls += 1;
     scrollY += y;
     window.dispatchEvent(new window.Event('scroll'));
   };
@@ -61,6 +64,15 @@ test('the scroll of the user is respected until the next track', async () => {
   page.window.dispatchEvent(new page.window.Event('wheel'));
   page.siteScrollsTo(150);
   assert.equal(page.scrollY(), 150);
+  page.close();
+});
+
+test('a player taller than the screen stays with its top in view instead of going up and down', () => {
+  const page = watchPage({ screenHeight: PLAYER_HEIGHT - 50 });
+  const before = page.scrolls();
+  page.siteScrollsTo(120);
+  assert.equal(page.scrollY(), 0);
+  assert.equal(page.scrolls() - before, 2, 'the scroll of the site and the one that undoes it');
   page.close();
 });
 

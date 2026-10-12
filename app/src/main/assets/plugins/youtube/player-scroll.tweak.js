@@ -37,8 +37,8 @@
     if (!keeping || !onWatch || !visibility) { return; }
     if (visibility.hiddenAbove > 0) {
       window.scrollBy(0, -visibility.hiddenAbove);
-    } else if (visibility.hiddenBelow > 0) {
-      window.scrollBy(0, visibility.hiddenBelow);
+    } else if (visibility.hiddenBelow > 0 && visibility.roomAbove > 0) {
+      window.scrollBy(0, Math.min(visibility.hiddenBelow, visibility.roomAbove));
     }
   }
 })();
