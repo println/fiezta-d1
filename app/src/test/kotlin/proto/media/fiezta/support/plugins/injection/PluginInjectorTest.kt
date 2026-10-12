@@ -98,6 +98,13 @@ class PluginInjectorTest {
     }
 
     @Test
+    fun thePageBusReachesAPageWithNoCoreSoItsScriptsCanSubscribe() {
+        injector(PluginEnv.PHONE).onPageStage(PageStage.COMMITTED, "https://music.site.com/")
+
+        assertEquals(listOf("bus", "script:a.tweak.js"), evaluated)
+    }
+
+    @Test
     fun aNewDocumentInjectsTheCoreAgain() {
         val injector = injector(PluginEnv.PHONE)
         injector.onPageStage(PageStage.COMMITTED, "https://m.site.com/")

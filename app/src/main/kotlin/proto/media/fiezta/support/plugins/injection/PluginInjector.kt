@@ -25,6 +25,7 @@ class PluginInjector(
 
     private var activeEvents: ResolvedEvents? = null
     private val coresInjectedThisDocument = mutableSetOf<Pair<String, String>>()
+    private var pageBusInjectedThisDocument = false
     private var handlers: Set<String> = emptySet()
     private var voiceSearchContext: VoiceSearchContext? = null
     private val tweaksRunThisLoad = mutableSetOf<Pair<String, String>>()
@@ -61,6 +62,7 @@ class PluginInjector(
         tweaksRunThisLoad.clear()
         lastUrlRunForTweak.clear()
         coresInjectedThisDocument.clear()
+        pageBusInjectedThisDocument = false
         handlers = emptySet()
         activeEvents = null
         injectCores(url)
@@ -119,10 +121,10 @@ class PluginInjector(
 
     private fun injectCores(url: String?) {
         if (url == null) return
+        if (!pageBusInjectedThisDocument) pageBusInjectedThisDocument = evaluate(source.pageBus())
+        if (!pageBusInjectedThisDocument) return
         val pending = PluginResolver(source.stack()).coresFor(url)
             .filter { (it.pluginId to it.script) !in coresInjectedThisDocument }
-        if (pending.isEmpty()) return
-        if (!evaluate(source.pageBus())) return
         for (core in pending) {
             log.debug("core -> ${core.pluginId}/${core.script}")
             if (evaluate(source.script(core.pluginId, core.script))) {
