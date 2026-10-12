@@ -30,7 +30,11 @@
     var video = elements.adVideo;
     if (video && !video.__fieztaAdPrune) {
       video.__fieztaAdPrune = true;
-      video.addEventListener('durationchange', function() { skipAd(window.fieztaPage.lastElements('youtube:adChanged')); });
+      ['durationchange', 'timeupdate'].forEach(function(type) {
+        video.addEventListener(type, function() {
+          if (window.fieztaPage.last('youtube:adChanged').showing) { skipAd(window.fieztaPage.lastElements('youtube:adChanged')); }
+        });
+      });
     }
   });
 })();

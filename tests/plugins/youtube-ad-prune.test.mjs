@@ -49,3 +49,25 @@ test('an ad whose duration arrives late is skipped when it does', async () => {
   assert.equal(video.currentTime, 20);
   page.close();
 });
+
+test('an ad that survives the first jump is jumped again while it plays', async () => {
+  const page = adPage();
+  const { video } = showAd(page);
+  await page.waitFor(() => video.currentTime === 15, 500);
+  video.currentTime = 3;
+  page.fireMediaEvent(video, 'timeupdate');
+  assert.equal(video.currentTime, 15);
+  page.close();
+});
+
+test('once the ad is over the video is left alone', async () => {
+  const page = adPage();
+  const { video } = showAd(page);
+  await page.waitFor(() => video.currentTime === 15, 500);
+  page.document.getElementById('movie_player').classList.remove('ad-showing');
+  await page.waitFor(() => !page.bus.last('youtube:adChanged').showing, 500);
+  video.currentTime = 3;
+  page.fireMediaEvent(video, 'timeupdate');
+  assert.equal(video.currentTime, 3);
+  page.close();
+});
