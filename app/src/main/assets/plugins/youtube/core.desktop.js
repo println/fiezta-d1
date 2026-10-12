@@ -8,7 +8,7 @@
       title: '#video-title',
       byline: '#byline',
       link: 'a#wc-endpoint',
-      header: 'ytd-playlist-panel-renderer #playlist-title',
+      header: 'ytd-playlist-panel-renderer #playlist-title, ytd-playlist-panel-renderer h3:not([id])',
       isCurrent: function(item) { return item.hasAttribute('selected'); }
     }
   });
