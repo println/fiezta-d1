@@ -3,6 +3,7 @@
     <style name="ToolbarButton" parent="@android:style/Widget.ImageButton">
         <item name="android:padding">16dp</item>
         <item name="android:scaleType">fitCenter</item>
+        <item name="android:background">@drawable/car_toolbar_button_background</item>
     </style>
 
     <style name="Theme.Car" parent="Base.Theme.AppCompat">

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import proto.media.fiezta.R
 import proto.media.fiezta.features.domain.car.app.CarScreenLauncher
 import proto.media.fiezta.features.domain.car.settings.showCarToast
+import proto.media.fiezta.features.domain.core.bookmarks.SiteColorStore
 import proto.media.fiezta.features.domain.core.browser.BrowserStorageUtils
 import proto.media.fiezta.features.domain.core.media.PreviousAction
 import proto.media.fiezta.features.domain.core.media.QueueResolution
@@ -417,6 +418,8 @@ object CarPlayer : JavascriptCallback.JSCallbacks, MediaControlBridge.Callbacks,
             pageLoading = state.isLoading
             ui.onPageLoadingChanged(state.isLoading)
         }
+
+        override fun onIconReceived(url: String?, icon: Bitmap) = SiteColorStore.learnFromIcon(appContext, url, icon)
 
         override fun onDocumentStage(stage: DocumentStage, documentId: String, url: String?) {
             pluginInjector.onPageStage(stage.toPageStage(), url)

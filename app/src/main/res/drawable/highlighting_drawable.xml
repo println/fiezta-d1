@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/rounded_press"
-        android:state_pressed="true" />
-    <item android:drawable="@drawable/rounded_highlight"
-        android:state_focused="true" />
-    <item android:drawable="@drawable/rounded_active" android:state_activated="true"/>
-    <item android:drawable="@color/very_dark_gray"/>
-</selector>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/car_settings_ripple">
+    <item android:id="@android:id/mask">
+        <color android:color="@android:color/white" />
+    </item>
+    <item>
+        <selector>
+            <item android:drawable="@drawable/rounded_highlight" android:state_focused="true" />
+            <item android:drawable="@drawable/rounded_active" android:state_activated="true" />
+            <item android:drawable="@color/very_dark_gray" />
+        </selector>
+    </item>
+</ripple>

@@ -36,7 +36,6 @@
                     android:layout_width="@dimen/car_toolbar_thickness"
                     android:layout_height="@dimen/car_toolbar_thickness"
                     android:layout_gravity="center"
-                    android:background="@drawable/highlighting_drawable"
                     style="@style/ToolbarButton"
                     android:src="@drawable/ic_car_home"
                     android:text="@string/home" />
@@ -46,7 +45,6 @@
                     android:layout_width="@dimen/car_toolbar_thickness"
                     android:layout_height="@dimen/car_toolbar_thickness"
                     android:layout_gravity="center"
-                    android:background="@drawable/highlighting_drawable"
                     style="@style/ToolbarButton"
                     android:src="@drawable/ic_car_voice"
                     android:text="@string/voice_search" />
@@ -56,7 +54,6 @@
                     android:layout_width="@dimen/car_toolbar_thickness"
                     android:layout_height="@dimen/car_toolbar_thickness"
                     android:layout_gravity="center"
-                    android:background="@drawable/highlighting_drawable"
                     style="@style/ToolbarButton"
                     android:src="@drawable/ic_car_refresh"
                     android:text="@string/refresh_page" />
@@ -66,7 +63,6 @@
                     android:layout_width="@dimen/car_toolbar_thickness"
                     android:layout_height="@dimen/car_toolbar_thickness"
                     android:layout_gravity="center"
-                    android:background="@drawable/highlighting_drawable"
                     style="@style/ToolbarButton"
                     android:src="@drawable/ic_car_back"
                     android:text="@string/webview_back" />
@@ -76,7 +72,6 @@
                     android:layout_width="@dimen/car_toolbar_thickness"
                     android:layout_height="@dimen/car_toolbar_thickness"
                     android:layout_gravity="center"
-                    android:background="@drawable/highlighting_drawable"
                     style="@style/ToolbarButton"
                     android:src="@drawable/ic_car_settings"
                     android:text="@string/settings" />

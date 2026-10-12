@@ -166,3 +166,37 @@ the wheel is taken to be on the left, which is exactly the layout from before th
 > the toolbar position sends them back to the driver's corner.
 
 **Built, not yet confirmed.** Waiting for the user's check on the DHU; not tried in the car.
+
+## CR-22 — The settings panel closes by itself
+
+> **As a** driver
+> **I want** the settings panel to close when I stop using it
+> **So that** it does not stay over the page if I forget it open.
+
+> **Given** the settings panel is open
+> **When** a minute goes by with no touch and no steering wheel key on it
+> **Then** it closes, and the toolbar goes back to hiding by itself if it is set to (CR-14).
+> **And** every touch or key on the panel starts the minute again.
+> **And** a screen opened from the panel, such as bookmarks or search, does not close by itself.
+
+**Built, not yet confirmed.** Not tried on the DHU or in the car.
+
+## CR-23 — Each site has its colour on the bookmarks bar
+
+> **As a** driver
+> **I want** every bookmark of a site to carry that site's colour
+> **So that** I find a site on the bar by its colour, without reading.
+
+> **Given** the bookmarks bar on the car screen
+> **Then** all the bookmarks of one domain have the same colour, whatever their titles.
+> **And** the colour is the accent of the site's icon, never its white, black or grey: red for
+> YouTube, purple for Twitch, blue for Facebook.
+> **And** a site whose icon has many colours and none that stands out, such as Google, is white,
+> with dark initials.
+> **And** a bright accent is dimmed so the white initials stay readable.
+> **And** the colour is learned when the site is opened on the car screen and the bar picks it up
+> at once; until then, or when the icon has no accent, the domain gets a colour of the app's own
+> palette, always the same one.
+
+**Built, not yet confirmed.** Seen on the emulator learning YouTube and Google; not tried in the
+car. The phone's bookmark list keeps its colours by initials.

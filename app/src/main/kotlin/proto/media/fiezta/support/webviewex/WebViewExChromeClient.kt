@@ -1,5 +1,6 @@
 package proto.media.fiezta.support.webviewex
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Build
@@ -19,6 +20,7 @@ import android.widget.VideoView
 
 internal interface ChromeHooks {
     fun onProgress(percent: Int)
+    fun onIconReceived(url: String?, icon: Bitmap)
     fun onCreateWindow(view: WebView, isUserGesture: Boolean, resultMsg: Message): Boolean
 }
 
@@ -70,6 +72,11 @@ open class WebViewExChromeClient : WebChromeClient(),
     override fun onProgressChanged(view: WebView, newProgress: Int) {
         super.onProgressChanged(view, newProgress)
         hooks?.onProgress(newProgress)
+    }
+
+    override fun onReceivedIcon(view: WebView, icon: Bitmap) {
+        super.onReceivedIcon(view, icon)
+        hooks?.onIconReceived(view.url, icon)
     }
 
     override fun onCreateWindow(view: WebView, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message): Boolean =

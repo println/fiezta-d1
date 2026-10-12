@@ -108,6 +108,9 @@ class WebViewEx<W : VideoWebView>(
         override fun onUnhandledKeyEvent(event: KeyEvent) = handleUnhandledKey(event)
         override fun onRenderProcessGone(view: WebView) = handleRenderProcessGone(view)
         override fun onProgress(percent: Int) = handleProgress(percent)
+        override fun onIconReceived(url: String?, icon: Bitmap) {
+            if (!currentDocumentIsError) listeners.forEach { it.onIconReceived(url, icon) }
+        }
         override fun onCreateWindow(view: WebView, isUserGesture: Boolean, resultMsg: Message) =
             handleCreateWindow(view, isUserGesture, resultMsg)
     }
@@ -191,12 +194,9 @@ class WebViewEx<W : VideoWebView>(
         }
 
     val loading: LoadingState
-        get() {
-            val transaction = tracker.current
-            val inFlight = webView != null && !currentDocumentIsError && transaction != null &&
-                (transaction.state == NavigationState.PENDING || transaction.state == NavigationState.COMMITTED)
-            return if (inFlight) LoadingState(true, lastProgress) else LoadingState.IDLE
-        }
+        get() =
+            if (webView == null || currentDocumentIsError) LoadingState.IDLE
+            else LoadingState.of(tracker.current, lastProgress)
 
     val history: BrowserHistory
         get() {

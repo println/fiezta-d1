@@ -19,6 +19,7 @@ interface WebViewExListener {
     fun onMediaElementEvent(event: MediaElementEvent, positionSeconds: Double, documentId: String) = Unit
     fun onPlaybackVerdict(playback: PlaybackSnapshot) = Unit
     fun onLoadingChanged(state: LoadingState) = Unit
+    fun onIconReceived(url: String?, icon: Bitmap) = Unit
     fun onRenderModeChanged(mode: RenderMode) = Unit
     fun onSchemeFallback(url: String, host: String?) = Unit
     fun onExternalLinkBlocked(url: String, failure: NavigationFailure) = Unit

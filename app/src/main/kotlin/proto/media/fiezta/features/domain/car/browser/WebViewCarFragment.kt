@@ -65,10 +65,12 @@ import proto.media.fiezta.features.domain.car.bookmarks.CarFavoritesBarAdapter
 import proto.media.fiezta.features.domain.car.settings.BookmarksScreen
 import proto.media.fiezta.features.domain.car.settings.CarSettingsNavigator
 import proto.media.fiezta.features.domain.car.settings.CarSettingsPanel
+import proto.media.fiezta.features.domain.car.settings.CarSettingsPanelLayout
 import proto.media.fiezta.features.domain.car.settings.showCarToast
 import proto.media.fiezta.features.domain.car.settings.GoToAddressScreen
 import proto.media.fiezta.features.domain.core.bookmarks.Bookmark
 import proto.media.fiezta.features.domain.core.bookmarks.BookmarkUtils
+import proto.media.fiezta.features.domain.core.bookmarks.SiteColorStore
 import proto.media.fiezta.support.search.SearchEngine
 import proto.media.fiezta.support.search.SearchEngineSelector
 import proto.media.fiezta.support.media.contract.ClientHandle
@@ -119,7 +121,7 @@ class WebViewCarFragment : CarFragment(), MainCarActivity.ActivityCallbacks,
     private var dragStartTop = 0f
     private lateinit var aspectRatioGroup: RadioGroup
     private var voiceButton: ImageButton? = null
-    private lateinit var settingsPanel: View
+    private lateinit var settingsPanel: CarSettingsPanelLayout
     private lateinit var settingsScreen: View
     private lateinit var settingsScreenTitle: TextView
     private lateinit var settingsNavigator: CarSettingsNavigator
@@ -136,6 +138,9 @@ class WebViewCarFragment : CarFragment(), MainCarActivity.ActivityCallbacks,
     private lateinit var favoritesBarAdapter: CarFavoritesBarAdapter
     private var favoritesBarBookmarks: RealmResults<Bookmark>? = null
     private var favoritesBarRealm: Realm? = null
+    private val siteColorListener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+        favoritesBarAdapter.notifyDataSetChanged()
+    }
     private var appliedZoomPercent = 0
 
     private var toolbarPosition = ToolbarPosition.LEFT
@@ -293,7 +298,8 @@ class WebViewCarFragment : CarFragment(), MainCarActivity.ActivityCallbacks,
         val settingsScreenBody = view.findViewById<FrameLayout>(R.id.settings_screen_body)
         settingsNavigator = CarSettingsNavigator(
             settingsPanel, view.findViewById(R.id.settings_panel_outside), settingsScreen, settingsScreenBody,
-            settingsScreenTitle, LayoutInflater.from(context), mirroredToDriver = { mirroredSide == ScreenSide.RIGHT }
+            settingsScreenTitle, LayoutInflater.from(context), mirroredToDriver = { mirroredSide == ScreenSide.RIGHT },
+            onPanelClosedWhenIdle = { scheduleAutoHide() }
         )
         carSettingsPanel = CarSettingsPanel(
             settingsPanel, CarPlayer.browser, { CarPlayer.host },
@@ -377,6 +383,7 @@ class WebViewCarFragment : CarFragment(), MainCarActivity.ActivityCallbacks,
         favoritesBarAdapter = CarFavoritesBarAdapter(emptyList())
         favoritesBarAdapter.setOnBookmarkSelected { bookmark -> bookmark.url?.let { CarPlayer.browser.open(it) } }
         favoritesBar.adapter = favoritesBarAdapter
+        SiteColorStore.registerChangeListener(context!!, siteColorListener)
         val favoritesRealm = Realm.getDefaultInstance()
         favoritesBarRealm = favoritesRealm
         BookmarkUtils.seedDefaultFavoritesOnce(context!!, favoritesRealm)
@@ -1135,9 +1142,13 @@ class WebViewCarFragment : CarFragment(), MainCarActivity.ActivityCallbacks,
         if (::carSettingsPanel.isInitialized) {
             carSettingsPanel.release()
         }
+        if (::settingsNavigator.isInitialized) {
+            settingsNavigator.release()
+        }
         if (::realtimeSettingsSync.isInitialized) {
             realtimeSettingsSync.unregister()
         }
+        context?.let { SiteColorStore.unregisterChangeListener(it, siteColorListener) }
         favoritesBarBookmarks?.let {
             it.removeAllChangeListeners()
             favoritesBarBookmarks = null

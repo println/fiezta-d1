@@ -26,6 +26,8 @@ stories were given.
 | CR-19 Keep the controls on the driver's side | [What the car screen can do](03-car-screen.md) |
 | CR-20 Drag the full-screen controls out of the way | [What the car screen can do](03-car-screen.md) |
 | CR-21 YouTube does not stop to ask whether I am still watching | [YouTube in the car](01-youtube.md) |
+| CR-22 The settings panel closes by itself | [What the car screen can do](03-car-screen.md) |
+| CR-23 Each site has its colour on the bookmarks bar | [What the car screen can do](03-car-screen.md) |
 
 ## Not met yet
 
@@ -40,5 +42,7 @@ stories were given.
 - **CR-19** — not tried on a car with the steering wheel on the right.
 - **CR-20** — not built yet.
 - **CR-21** — built from YouTube's page code; not yet seen cancelling the question on the car.
+- **CR-22** — built; not tried on the DHU or in the car.
+- **CR-23** — built; seen on the emulator, not tried in the car.
 
 CR-7 to CR-16 and CR-18 are all there and doing what the user wants.

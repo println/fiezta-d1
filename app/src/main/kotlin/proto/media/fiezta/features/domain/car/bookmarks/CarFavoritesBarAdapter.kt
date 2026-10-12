@@ -1,5 +1,6 @@
 package proto.media.fiezta.features.domain.car.bookmarks
 
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,8 @@ import android.widget.TextView
 import proto.media.fiezta.R
 import proto.media.fiezta.features.domain.core.bookmarks.Bookmark
 import proto.media.fiezta.features.domain.core.bookmarks.BookmarkMonogram
+import proto.media.fiezta.features.domain.core.bookmarks.SiteColor
+import proto.media.fiezta.features.domain.core.bookmarks.SiteColorStore
 
 class CarFavoritesBarAdapter(private var bookmarks: List<Bookmark>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -46,11 +49,18 @@ class CarFavoritesBarAdapter(private var bookmarks: List<Bookmark>) :
         fun bind(bookmark: Bookmark) {
             val initials = BookmarkMonogram.of(bookmark.title, bookmark.url)
             monogram.text = initials
-            val palette = itemView.resources.getIntArray(R.array.car_favorite_monogram_palette)
-            val fillColor = palette[BookmarkMonogram.paletteIndex(initials, palette.size)]
+            val fillColor = fillColorOf(bookmark.url)
             monogram.background = CarMonogramBackground.create(itemView.context, fillColor)
+            val initialsColor = if (SiteColor.needsDarkInitials(fillColor)) R.color.brandBackground else android.R.color.white
+            monogram.setTextColor(ContextCompat.getColor(itemView.context, initialsColor))
             itemView.isFocusable = true
             itemView.isClickable = true
+        }
+
+        private fun fillColorOf(url: String?): Int {
+            SiteColorStore.colorOf(itemView.context, url)?.let { return it }
+            val palette = itemView.resources.getIntArray(R.array.car_favorite_monogram_palette)
+            return palette[SiteColor.fallbackIndex(SiteColor.domainOf(url), palette.size)]
         }
     }
 
