@@ -85,6 +85,12 @@
     <string name="settings_protected_content_summary">Necessário para serviços de streaming. Pode não funcionar na tela projetada.</string>
     <string name="settings_update_notice_title">Verificar novas versões</string>
     <string name="settings_update_notice_summary">Ao abrir o app, avisa se há versão nova</string>
+    <string name="app_warnings">Avisos</string>
+    <string name="app_warnings_all_set">Tudo configurado.</string>
+    <string name="app_warning_battery_title">A economia de bateria pode parar a música</string>
+    <string name="app_warning_battery_message">Em sessões longas com a tela apagada, o celular pode interromper o Fiezta D1. Toque para deixar a bateria sem restrições.</string>
+    <string name="app_warning_microphone_title">Falta o acesso ao microfone</string>
+    <string name="app_warning_microphone_message">A busca por voz no celular e no carro não funciona sem ele. Toque para permitir.</string>
     <string name="update_available_title">Nova versão disponível</string>
     <string name="update_available_message">O Fiezta %1$s está disponível.</string>
     <string name="update_available_download">Baixar</string>

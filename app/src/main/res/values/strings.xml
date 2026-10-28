@@ -94,6 +94,12 @@
     <string name="settings_protected_content_summary">Needed for streaming services. May not work on the projected screen.</string>
     <string name="settings_update_notice_title">Check for new versions</string>
     <string name="settings_update_notice_summary">When the app opens, tells you if there is a new version</string>
+    <string name="app_warnings">Warnings</string>
+    <string name="app_warnings_all_set">Everything is set up.</string>
+    <string name="app_warning_battery_title">Battery saving can stop the music</string>
+    <string name="app_warning_battery_message">In long sessions with the screen off, the phone may stop Fiezta D1. Tap to set battery saving to no restrictions.</string>
+    <string name="app_warning_microphone_title">Microphone access is missing</string>
+    <string name="app_warning_microphone_message">Voice search on the phone and in the car does not work without it. Tap to allow it.</string>
     <string name="update_available_title">New version available</string>
     <string name="update_available_message">Fiezta %1$s is available.</string>
     <string name="update_available_download">Download</string>

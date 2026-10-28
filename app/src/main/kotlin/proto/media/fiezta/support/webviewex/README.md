@@ -69,8 +69,8 @@ existe uma segunda classe `WebViewEx` para o carro.
   cada navegação, inclusive indo para trás/frente, porque hosts diferentes podem pedir UA
   diferente.
 - **`RenderProcessGone` não resume sozinho.** A `WebView` é destruída e, se a política de
-  recuperação permitir (com limite de taxa), recriada do zero — não há resumo transparente de
-  sessão.
+  recuperação permitir (com limite de taxa), recriada do zero e reabre a URL que perdeu (ou a
+  `initialUrl()` do delegate, se perdeu uma tela de erro) — não há resumo transparente de sessão.
 - **O bootstrap é por documento, não por página.** `assets/webviewex/bootstrap.js` é injetado a
   cada `onPageStarted` com um id de documento embutido; estágios reportados por um documento que
   já morreu (SPA que trocou de rota no meio) são descartados, não aplicados por engano ao

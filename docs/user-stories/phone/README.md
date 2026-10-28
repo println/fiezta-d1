@@ -27,6 +27,8 @@ what already works today, which is the detail the app must not lose.
 | PH-19 Speak to the assistant on the phone and have the car obey | [Driving the car from the phone](05-car-from-phone.md) |
 | PH-20 Donate from Settings | [Settings](07-settings.md) |
 | PH-21 Know when a new version is out | [Settings](07-settings.md) |
+| PH-22 Be warned when the phone is set up in a way that stops the app | [App warnings](08-app-warnings.md) |
+| PH-23 Be warned when an access the app needs is missing | [App warnings](08-app-warnings.md) |
 
 ## Not met yet
 

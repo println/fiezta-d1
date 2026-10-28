@@ -100,6 +100,11 @@
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden|uiMode|navigation|density"
             android:theme="@style/Theme.Settings"
             android:parentActivityName=".features.domain.phone.plugins.PluginsPhoneActivity" />
+        <activity
+            android:name="proto.media.fiezta.features.domain.phone.warnings.WarningsPhoneActivity"
+            android:label="@string/app_warnings"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden|uiMode|navigation|density"
+            android:theme="@style/Theme.Settings" />
     </application>
 
 </manifest>

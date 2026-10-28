@@ -1,4 +1,5 @@
 package proto.media.fiezta.features.domain.phone.browser
+
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
@@ -14,6 +15,7 @@ import proto.media.fiezta.R
 import proto.media.fiezta.features.domain.core.settings.SettingsStorage
 import proto.media.fiezta.features.domain.core.bookmarks.BookmarkUtils
 import proto.media.fiezta.features.domain.phone.settings.SettingsPhoneActivity
+import proto.media.fiezta.features.domain.phone.warnings.WarningsPhoneActivity
 import proto.media.fiezta.support.webviewex.WebViewEx
 import proto.media.fiezta.support.webviewex.navigation.HostName
 import io.realm.Realm
@@ -97,6 +99,10 @@ object BrowserMenuPopup {
         content.findViewById<View>(R.id.menu_bookmarks).setOnClickListener {
             popupWindow.dismiss()
             listener.onShowBookmarks()
+        }
+        content.findViewById<View>(R.id.menu_warnings).setOnClickListener {
+            popupWindow.dismiss()
+            context.startActivity(Intent(context, WarningsPhoneActivity::class.java))
         }
         content.findViewById<View>(R.id.menu_settings).setOnClickListener {
             popupWindow.dismiss()

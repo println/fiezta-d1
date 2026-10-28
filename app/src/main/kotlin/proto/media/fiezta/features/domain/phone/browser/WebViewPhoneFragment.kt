@@ -3,7 +3,6 @@ package proto.media.fiezta.features.domain.phone.browser
 import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.net.Uri
@@ -22,9 +21,10 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.ImageViewCompat
@@ -35,6 +35,9 @@ import proto.media.fiezta.features.domain.core.settings.SettingsStorage
 import proto.media.fiezta.features.domain.core.bookmarks.Bookmark
 import proto.media.fiezta.features.domain.core.bookmarks.BookmarksClickCallback
 import proto.media.fiezta.features.domain.phone.bookmarks.BookmarksFragment
+import proto.media.fiezta.features.domain.phone.warnings.AppWarningResolver
+import proto.media.fiezta.features.domain.phone.warnings.AppWarningRows
+import proto.media.fiezta.features.domain.phone.warnings.PhoneSetupProbe
 import proto.media.fiezta.features.domain.car.browser.CarCastUtils
 import proto.media.fiezta.features.domain.core.browser.BrowserStorageUtils
 import proto.media.fiezta.support.webviewex.VideoWebView
@@ -79,6 +82,11 @@ class WebViewPhoneFragment : Fragment(), BookmarksClickCallback {
     private lateinit var overflowButton: ImageButton
     private lateinit var rootLayout: View
     private lateinit var editOverlay: View
+    private lateinit var homeWarnings: ViewGroup
+    private val microphoneRequest: ActivityResultLauncher<String> = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        warningResolver().onMicrophoneAnswered(granted)
+        refreshWarnings()
+    }
 
     private var barHasPage = false
 
@@ -121,6 +129,7 @@ class WebViewPhoneFragment : Fragment(), BookmarksClickCallback {
         castButton = view.findViewById(R.id.btn_send_to_car)
         overflowButton = view.findViewById(R.id.btn_overflow)
         editOverlay = view.findViewById(R.id.edit_overlay)
+        homeWarnings = view.findViewById(R.id.home_warnings)
         suggestionsContainer = view.findViewById(R.id.suggestions_container)
         suggestionRows = arrayOf(
             view.findViewById(R.id.suggestion_row_0),
@@ -447,30 +456,19 @@ class WebViewPhoneFragment : Fragment(), BookmarksClickCallback {
     override fun onResume() {
         super.onResume()
         webView.requestFocus()
-        askForRecordAudioPermission()
+        refreshWarnings()
     }
+
+    private fun refreshWarnings() {
+        AppWarningRows.show(homeWarnings, PhoneSetupProbe.read(requireContext()).warnings) { warningResolver().resolve(it) }
+    }
+
+    private fun warningResolver(): AppWarningResolver =
+        AppWarningResolver(requireActivity()) { microphoneRequest.launch(Manifest.permission.RECORD_AUDIO) }
 
     override fun onPause() {
         super.onPause()
         browser.flushCookies()
-    }
-
-    fun askForRecordAudioPermission() {
-        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.RECORD_AUDIO)) {
-                val builder = AlertDialog.Builder(requireActivity())
-                builder.setTitle("Need Microphone Permission")
-                builder.setMessage("To use voice input feature in your car, you need to grant permissions. With voice input, you can search on Youtube with your voice. \nFor e.g., say 'Coldplay' and it will search for Coldplay on Youtube")
-                builder.setPositiveButton("Grant") { dialog, _ ->
-                    dialog.cancel()
-                    ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.RECORD_AUDIO), 1)
-                }
-                builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-                builder.show()
-            } else {
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.RECORD_AUDIO), 1)
-            }
-        }
     }
 
     override fun onBookmarkSelected(bookmark: Bookmark) {

@@ -921,6 +921,7 @@ class WebViewEx<W : VideoWebView>(
     private fun recoverFromRenderProcessGone(gone: WebView) {
         if (gone !== webView) return
         val response = delegate.onRenderProcessGone()
+        val lostUrl = session.url?.takeUnless { session.isErrorDocument }
         val attachedContainer = container
         listeners.forEach { it.onViewDestroying() }
         destroy()
@@ -935,6 +936,7 @@ class WebViewEx<W : VideoWebView>(
             gearhead?.onAttachedToScreen(created, attachedContainer)
             listeners.forEach { it.onViewRecreated() }
         }
+        (lostUrl ?: delegate.initialUrl())?.let { open(it) }
     }
 
     private companion object {
