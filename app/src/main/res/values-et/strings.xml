@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">Klaviatuur</string>
     <string name="car_voice_search_error">Ma ei kuulnud seda</string>
     <string name="car_voice_search_no_permission">Vajalik on mikrofoni luba</string>
+    <string name="car_voice_search_network">Internetiühendus puudub</string>
 
     <string name="settings_resume_on_focus_title">Jätka videot automaatselt</string>
     <string name="settings_resume_on_focus_summary">Jätkab esitust pärast seda, kui tagurduskaamera või mõni muu rakendus on ekraani üle võtnud. Jätkab ainult siis, kui rakendus ise selle peatas.</string>

@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">Tastiera</string>
     <string name="car_voice_search_error">Non ho sentito bene</string>
     <string name="car_voice_search_no_permission">Autorizzazione al microfono necessaria</string>
+    <string name="car_voice_search_network">Nessuna connessione a Internet</string>
 
     <string name="settings_resume_on_focus_title">Riprendi il video automaticamente</string>
     <string name="settings_resume_on_focus_summary">Riprende la riproduzione dopo che la telecamera posteriore o un\'altra app ha preso lo schermo. Riprende solo se è stata l\'app stessa a mettere in pausa.</string>

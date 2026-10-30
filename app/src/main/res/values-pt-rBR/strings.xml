@@ -68,6 +68,7 @@
     <string name="car_search_keyboard">Teclado</string>
     <string name="car_voice_search_error">Não consegui ouvir</string>
     <string name="car_voice_search_no_permission">Permissão de microfone necessária</string>
+    <string name="car_voice_search_network">Sem conexão com a internet</string>
 
     <string name="settings_resume_on_focus_title">Retomar vídeo automaticamente</string>
     <string name="settings_resume_on_focus_summary">Retoma a reprodução depois que a câmera de ré ou outro aplicativo assume a tela. Só retoma se o próprio aplicativo tiver pausado.</string>

@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">แป้นพิมพ์</string>
     <string name="car_voice_search_error">ไม่ได้ยินเสียง</string>
     <string name="car_voice_search_no_permission">ต้องการสิทธิ์เข้าถึงไมโครโฟน</string>
+    <string name="car_voice_search_network">ไม่มีการเชื่อมต่ออินเทอร์เน็ต</string>
 
     <string name="settings_resume_on_focus_title">เล่นวิดีโอต่อโดยอัตโนมัติ</string>
     <string name="settings_resume_on_focus_summary">เล่นต่อหลังจากกล้องมองหลังหรือแอปอื่นเข้าใช้หน้าจอ จะเล่นต่อเฉพาะเมื่อแอปเป็นผู้หยุดชั่วคราวเอง</string>

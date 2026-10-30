@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">Klawiatura</string>
     <string name="car_voice_search_error">Nie udało się usłyszeć</string>
     <string name="car_voice_search_no_permission">Wymagane uprawnienie do mikrofonu</string>
+    <string name="car_voice_search_network">Brak połączenia z internetem</string>
 
     <string name="settings_resume_on_focus_title">Automatycznie wznawiaj film</string>
     <string name="settings_resume_on_focus_summary">Wznawia odtwarzanie po tym, jak kamera cofania lub inna aplikacja przejmie ekran. Wznawia tylko wtedy, gdy to sama aplikacja wstrzymała odtwarzanie.</string>

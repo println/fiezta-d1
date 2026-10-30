@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">Näppäimistö</string>
     <string name="car_voice_search_error">En kuullut tuota</string>
     <string name="car_voice_search_no_permission">Mikrofonin käyttöoikeus vaaditaan</string>
+    <string name="car_voice_search_network">Ei internetyhteyttä</string>
 
     <string name="settings_resume_on_focus_title">Jatka videota automaattisesti</string>
     <string name="settings_resume_on_focus_summary">Jatkaa toistoa sen jälkeen, kun peruutuskamera tai toinen sovellus on ottanut näytön haltuunsa. Jatkaa vain, jos sovellus itse keskeytti toiston.</string>

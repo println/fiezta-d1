@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">Tastatur</string>
     <string name="car_voice_search_error">Das habe ich nicht verstanden</string>
     <string name="car_voice_search_no_permission">Mikrofonberechtigung erforderlich</string>
+    <string name="car_voice_search_network">Keine Internetverbindung</string>
 
     <string name="settings_resume_on_focus_title">Video automatisch fortsetzen</string>
     <string name="settings_resume_on_focus_summary">Setzt die Wiedergabe fort, nachdem die Rückfahrkamera oder eine andere App den Bildschirm übernommen hat. Wird nur fortgesetzt, wenn die App selbst pausiert hat.</string>

@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">Клавиатура</string>
     <string name="car_voice_search_error">Не успях да чуя</string>
     <string name="car_voice_search_no_permission">Необходимо е разрешение за микрофона</string>
+    <string name="car_voice_search_network">Няма връзка с интернет</string>
 
     <string name="settings_resume_on_focus_title">Автоматично възобновяване на видеото</string>
     <string name="settings_resume_on_focus_summary">Възобновява възпроизвеждането, след като камерата за задно виждане или друго приложение поеме екрана. Възобновява само ако самото приложение го е поставило на пауза.</string>

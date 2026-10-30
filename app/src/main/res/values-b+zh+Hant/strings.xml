@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">鍵盤</string>
     <string name="car_voice_search_error">沒有聽清楚</string>
     <string name="car_voice_search_no_permission">需要麥克風權限</string>
+    <string name="car_voice_search_network">沒有網路連線</string>
 
     <string name="settings_resume_on_focus_title">自動繼續播放影片</string>
     <string name="settings_resume_on_focus_summary">在倒車顯影或其他應用程式接管螢幕後繼續播放。僅在應用程式本身暫停時才會繼續。</string>

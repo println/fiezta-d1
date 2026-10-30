@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">Tastatur</string>
     <string name="car_voice_search_error">Jeg hørte det ikke</string>
     <string name="car_voice_search_no_permission">Tilladelse til mikrofon er påkrævet</string>
+    <string name="car_voice_search_network">Ingen internetforbindelse</string>
 
     <string name="settings_resume_on_focus_title">Genoptag video automatisk</string>
     <string name="settings_resume_on_focus_summary">Genoptager afspilningen, efter at bakkameraet eller en anden app har overtaget skærmen. Genoptager kun, hvis appen selv satte den på pause.</string>

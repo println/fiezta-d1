@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">Тастатура</string>
     <string name="car_voice_search_error">Не успеав да слушнам</string>
     <string name="car_voice_search_no_permission">Потребна е дозвола за микрофонот</string>
+    <string name="car_voice_search_network">Нема интернет врска</string>
 
     <string name="settings_resume_on_focus_title">Автоматски продолжи го видеото</string>
     <string name="settings_resume_on_focus_summary">Ја продолжува репродукцијата откако камерата за назад или друга апликација ќе го преземе екранот. Продолжува само ако самата апликација ја паузирала.</string>

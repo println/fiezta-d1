@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">Klavye</string>
     <string name="car_voice_search_error">Duyamadım</string>
     <string name="car_voice_search_no_permission">Mikrofon izni gerekli</string>
+    <string name="car_voice_search_network">İnternet bağlantısı yok</string>
 
     <string name="settings_resume_on_focus_title">Videoyu otomatik olarak sürdür</string>
     <string name="settings_resume_on_focus_summary">Geri görüş kamerası veya başka bir uygulama ekranı devraldıktan sonra oynatmayı sürdürür. Yalnızca uygulamanın kendisi duraklattıysa sürdürür.</string>

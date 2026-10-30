@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">键盘</string>
     <string name="car_voice_search_error">没有听清</string>
     <string name="car_voice_search_no_permission">需要麦克风权限</string>
+    <string name="car_voice_search_network">没有网络连接</string>
 
     <string name="settings_resume_on_focus_title">自动继续播放视频</string>
     <string name="settings_resume_on_focus_summary">在倒车影像或其他应用占用屏幕后继续播放。仅当是应用本身暂停时才会继续。</string>

@@ -44,7 +44,6 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RadioGroup
 import android.widget.TextView
-import android.widget.Toast
 import com.github.zagum.speechrecognitionview.RecognitionProgressView
 import proto.media.fiezta.BuildConfig
 import proto.media.fiezta.R
@@ -651,7 +650,7 @@ class WebViewCarFragment : CarFragment(), MainCarActivity.ActivityCallbacks,
 
             override fun onError(error: Int) {
                 if (speechRecognizer !== newRecognizer) return
-                voiceErrorMessage(error)?.let { Toast.makeText(ctx, it, Toast.LENGTH_SHORT).show() }
+                showCarToast(voiceOverlay, getString(voiceErrorMessage(error)))
                 stopVoiceInput(resumeVideo = false)
                 onInterrupted()
             }
@@ -677,8 +676,10 @@ class WebViewCarFragment : CarFragment(), MainCarActivity.ActivityCallbacks,
         recognitionProgressView.play()
     }
 
-    private fun voiceErrorMessage(error: Int): Int? = when (error) {
-        SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> null
+    private fun voiceErrorMessage(error: Int): Int = when (error) {
+        SpeechRecognizer.ERROR_NETWORK,
+        SpeechRecognizer.ERROR_NETWORK_TIMEOUT,
+        SpeechRecognizer.ERROR_SERVER -> R.string.car_voice_search_network
         SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> R.string.car_voice_search_no_permission
         else -> R.string.car_voice_search_error
     }

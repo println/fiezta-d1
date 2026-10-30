@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">Klávesnice</string>
     <string name="car_voice_search_error">Nerozuměl jsem</string>
     <string name="car_voice_search_no_permission">Je potřeba oprávnění k mikrofonu</string>
+    <string name="car_voice_search_network">Žádné připojení k internetu</string>
 
     <string name="settings_resume_on_focus_title">Automaticky obnovit video</string>
     <string name="settings_resume_on_focus_summary">Obnoví přehrávání poté, co obrazovku převezme couvací kamera nebo jiná aplikace. Obnoví jen tehdy, pokud přehrávání pozastavila sama aplikace.</string>

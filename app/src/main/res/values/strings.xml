@@ -77,6 +77,7 @@
     <string name="car_search_engine_duckduckgo" translatable="false">DuckDuckGo</string>
     <string name="car_voice_search_error">Couldn\'t hear that</string>
     <string name="car_voice_search_no_permission">Microphone permission required</string>
+    <string name="car_voice_search_network">No internet connection</string>
 
     <string name="settings_resume_on_focus_title">Resume video automatically</string>
     <string name="settings_resume_on_focus_summary">Resumes playback after the rear-view camera or another app takes over the screen. Only resumes if the app itself paused it.</string>

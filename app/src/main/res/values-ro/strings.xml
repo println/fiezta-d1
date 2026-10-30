@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">Tastatură</string>
     <string name="car_voice_search_error">Nu am auzit</string>
     <string name="car_voice_search_no_permission">Este necesară permisiunea pentru microfon</string>
+    <string name="car_voice_search_network">Nu există conexiune la internet</string>
 
     <string name="settings_resume_on_focus_title">Reia automat clipul video</string>
     <string name="settings_resume_on_focus_summary">Reia redarea după ce camera de mers înapoi sau altă aplicație preia ecranul. Reia doar dacă aplicația însăși a pus pauză.</string>

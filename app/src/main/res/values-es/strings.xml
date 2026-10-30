@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">Teclado</string>
     <string name="car_voice_search_error">No se ha entendido</string>
     <string name="car_voice_search_no_permission">Se necesita permiso de micrófono</string>
+    <string name="car_voice_search_network">Sin conexión a internet</string>
 
     <string name="settings_resume_on_focus_title">Reanudar el vídeo automáticamente</string>
     <string name="settings_resume_on_focus_summary">Reanuda la reproducción después de que la cámara de marcha atrás u otra aplicación tome la pantalla. Solo se reanuda si la propia aplicación la pausó.</string>

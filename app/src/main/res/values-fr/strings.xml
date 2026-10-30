@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">Clavier</string>
     <string name="car_voice_search_error">Je n\'ai pas entendu</string>
     <string name="car_voice_search_no_permission">Autorisation du microphone requise</string>
+    <string name="car_voice_search_network">Pas de connexion Internet</string>
 
     <string name="settings_resume_on_focus_title">Reprendre la vidéo automatiquement</string>
     <string name="settings_resume_on_focus_summary">Reprend la lecture après que la caméra de recul ou une autre application a pris l\'écran. Ne reprend que si l\'application l\'avait elle-même mise en pause.</string>

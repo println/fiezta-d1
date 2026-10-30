@@ -66,6 +66,7 @@
     <string name="car_search_keyboard">Toetsenbord</string>
     <string name="car_voice_search_error">Ik heb dat niet verstaan</string>
     <string name="car_voice_search_no_permission">Microfoontoestemming vereist</string>
+    <string name="car_voice_search_network">Geen internetverbinding</string>
 
     <string name="settings_resume_on_focus_title">Video automatisch hervatten</string>
     <string name="settings_resume_on_focus_summary">Hervat het afspelen nadat de achteruitrijcamera of een andere app het scherm heeft overgenomen. Hervat alleen als de app zelf heeft gepauzeerd.</string>
